@@ -42,13 +42,28 @@ public class HttpServer {
 
                 String requestLine = request.getStartLine();
 
+
                 String requestTarget = requestLine.split(" ")[1];
+
+                //If the request target is / go to index
+                if(requestTarget.equals("/"))
+                {
+                    requestTarget = "/index.html";
+                }
 
                 int questionPos = requestTarget.indexOf('?');
                 String requestPath = questionPos == -1 ? requestTarget : requestTarget.substring(0,questionPos);
                 if(!requestPath.equals("/echo"))
                 {
                     //Create the file and a response with the file content
+
+
+                    if(requestPath == "/")
+                    {
+                        requestPath += "index.html";
+                        System.out.println("Request: " + requestPath);
+                    }
+
                     File file = new File(fileLocation + requestPath);
 
 
@@ -72,9 +87,10 @@ public class HttpServer {
                 Map<String, String> requestParameters = parseRequestParameters(requestTarget);
                 String statusCode = requestParameters.getOrDefault("status","200");
                 String location = requestParameters.get("location");
+
                 String body = requestParameters.getOrDefault("body","Hello World!");
 
-                socket.getOutputStream().write(("HTTP/1.0 " + statusCode + " OK\r\n" +
+                socket.getOutputStream().write(("HTTP/1.1 " + statusCode + " OK\r\n" +
                         "Content-length: " + body.length() + "\r\n" +
                         (location != null ? "Location: " + location + "\r\n" : "") +
                         "\r\n" +
