@@ -23,13 +23,17 @@ public class MemberDao {
         try (Connection conn = dataSource.getConnection();) {
             PreparedStatement statement = conn.prepareStatement(
                     "insert into members (name) values (?)");
-            statement.setString(1, memberName);
+            insertMember(memberName, statement);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    private void insertMember(String memberName, PreparedStatement statement) throws SQLException {
+        statement.setString(1, memberName);
     }
 
 
@@ -42,12 +46,16 @@ public class MemberDao {
                     List<String> result = new ArrayList<>();
 
                     while (rs.next()) {
-                        result.add(rs.getString("name"));
+                        result.add(readName(rs));
                     }
                     return result;
                 }
             }
         }
+    }
+
+    private String readName(ResultSet rs) throws SQLException {
+        return rs.getString("name");
     }
 
     public static void main(String[] args) throws SQLException, IOException {
