@@ -27,7 +27,7 @@ public class Project {
         return this.name;
     }
 
-    public Boolean getEmail() {
+    public Boolean getStatus() {
         return this.status;
     }
 
