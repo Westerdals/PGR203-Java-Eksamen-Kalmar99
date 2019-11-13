@@ -1,5 +1,6 @@
 package no.kristiania.db;
 
+import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -46,6 +47,7 @@ public class MemberDao extends AbstractDao<Member> {
         dataSource.setUrl(properties.getProperty("dataSource.url"));
         dataSource.setUser(properties.getProperty("dataSource.username"));
         dataSource.setPassword(properties.getProperty("dataSource.password"));
+        Flyway.configure().dataSource(dataSource).load().migrate();
         MemberDao memberDao = new MemberDao(dataSource);
 
         memberDao.insert(new Member(memberName, memberEmail),"insert into members (name,email) values (?,?)");

@@ -1,6 +1,7 @@
 package no.kristiania.db;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.parser.Entity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

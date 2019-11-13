@@ -16,27 +16,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectDaoTest {
 
-    private JdbcDataSource dataSource;
+    private static JdbcDataSource dataSource;
 
     @BeforeEach
     void setUp()
     {
-        dataSource = new JdbcDataSource();
-        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-
-        Flyway.configure().dataSource(dataSource).load().migrate();
+       dataSource = MemberDaoTest.getDataSource();
     }
 
     @Test
     void shouldFindProject() throws SQLException {
         ProjectDao dao = new ProjectDao(dataSource);
+
+        Project project = getSampleProject();
+        dao.insert(project,"insert into projects (name,status) values (?,?)");
+        assertThat(dao.listAll("select * from projects")).contains(project);
+    }
+
+    public Project getSampleProject()
+    {
         String projectTitle = pickOne(new String[]{"Hilse","Hoppe","Bestå"});
         Boolean status = pickBool(new Boolean[] {true,false});
 
         Project testProject = new Project(projectTitle,status);
-
-        dao.insert(testProject,"insert into projects (name,status) values (?,?)");
-        assertThat(dao.listAll("select * from projects")).contains(testProject);
+        return testProject;
     }
 
 

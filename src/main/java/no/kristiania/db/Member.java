@@ -6,6 +6,7 @@ public class Member {
 
     private String name;
     private String email;
+    private int id;
 
     public Member(String name, String email)
     {
@@ -43,5 +44,9 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(name, email);
+    }
+
+    public int getId() {
+        return this.id;
     }
 }
