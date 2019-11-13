@@ -36,7 +36,7 @@ public class ProjectDaoTest {
         Project testProject = new Project(projectTitle,status);
 
         dao.insert(testProject,"insert into projects (name,status) values (?,?)");
-        assertThat(dao.listAll()).contains(testProject);
+        assertThat(dao.listAll("select * from projects")).contains(testProject);
     }
 
 

@@ -31,10 +31,9 @@ public abstract class AbstractDao<T> {
 
     public abstract T readObject(ResultSet rs) throws SQLException;
 
-    public List<T> listAll() throws SQLException {
+    public List<T> listAll(String sql) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "select * from members"
+            try (PreparedStatement statement = connection.prepareStatement(sql
             )) {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<T> result = new ArrayList<>();

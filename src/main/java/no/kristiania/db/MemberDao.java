@@ -50,6 +50,6 @@ public class MemberDao extends AbstractDao<Member> {
 
         memberDao.insert(new Member(memberName, memberEmail),"insert into members (name,email) values (?,?)");
 
-        System.out.println(memberDao.listAll());
+        System.out.println(memberDao.listAll("select * from members"));
     }
 }

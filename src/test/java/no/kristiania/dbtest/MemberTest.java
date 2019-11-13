@@ -35,7 +35,7 @@ public class MemberTest {
 
         dao.insert(member,"insert into members (name,email) values (?,?)");
 
-        assertThat(dao.listAll()).contains(member);
+        assertThat(dao.listAll("select * from members")).contains(member);
     }
 
     private String pickOne(String[] strings) {
