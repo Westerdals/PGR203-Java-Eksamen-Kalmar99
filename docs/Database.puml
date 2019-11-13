@@ -1,0 +1,54 @@
+@startuml
+
+package "db" #grey {
+
+class MemberDao {
+    + memberDao()
+    # void insertObject()
+    + readObject()
+    + {static} void main()
+
+}
+
+class ProjectDao {
+    + ProjectDao()
+    # insertObject()
+    + readObject()
+}
+
+class Project {
+    - Name: String
+    - Status: Boolean
+    + Project()
+    + void setName()
+    + getName()
+    + void setStatus()
+    + getStatus()
+}
+
+class Member {
+    - Name: String
+    - Email: String
+    + Member()
+    + void setName()
+    + getName()
+    + void setEmail()
+    + getEmail()
+}
+
+abstract class AbstractDao {
+    # dataSource: DataSource
+    + void insert()
+    # {abstract}insertObject()
+    + {abstract}readObject()
+    + listAll()
+}
+
+Member -up-> MemberDao
+Project -up-> ProjectDao
+AbstractDao -right-> MemberDao
+AbstractDao -left-> ProjectDao
+
+}
+
+@enduml

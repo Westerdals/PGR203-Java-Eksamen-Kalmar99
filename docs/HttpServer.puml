@@ -1,0 +1,44 @@
+ @startuml
+
+package "httpServer" {
+
+ class HttpServer{
+     - port: int
+     - fileLocation: String
+     - serverSocket: ServerSocket
+    + HttpServer()
+    + {static} void main()
+    + void start()
+    - void run()
+    - Map<> requestParameters()
+    + getPort(): int
+    + void setFileLocation()
+    + getFileLocation(): String
+    + void addController()
+ }
+
+ interface HttpController {
+    void handle()
+ }
+
+ class MapEntry {
+    key
+ }
+
+ HttpServer -right-> HttpController: default
+ HttpServer -down-> "*" MapEntry: routes
+ MapEntry -right-> HttpController
+
+ class FileHttpController implements HttpController {
+    + httpServer: HttpServer
+    + FileHttpController()
+    + void handle()
+ }
+
+ class EchoHttpController implements HttpController {
+    + void handle()
+ }
+
+ }
+
+ @enduml
