@@ -2,15 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Http Server</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>KristianiaProject</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-    <h1>Welcome to task manager</h1>
-</header>
+<h1>Project view</h1>
 
+<div id="projectMembers"></div>
 
+<div>
+    <a href="newWorker.html">Add new project member</a>
+</div>
 </body>
+<script>
+    fetch("/projectMembers")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        document.getElementById("projectMembers").innerHTML = text;
+    });
+</script>
 </html>

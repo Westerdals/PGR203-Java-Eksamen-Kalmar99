@@ -12,27 +12,22 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class MemberTest {
+public class MemberDaoTest {
 
     private JdbcDataSource dataSource;
 
     @BeforeEach
     void setUp()
     {
-        dataSource = new JdbcDataSource();
-        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-
-        Flyway.configure().dataSource(dataSource).load().migrate();
+        dataSource = getDataSource();
     }
 
     @Test
     void shouldRetrieveStoredMembers() throws SQLException {
 
         MemberDao dao = new MemberDao(dataSource);
-        String memberName = pickOne(new String[] {"Kriss", "Kalmar", "Andre", "Tredje"});
-        String memberEmail = pickOne(new String[] {"Kriss@tull.com", "Kalmartull.com", "Andretull.com", "Tredjetull.com"});
-        Member member = new Member(memberName,memberEmail);
 
+        Member member = getSampleMember();
         dao.insert(member,"insert into members (name,email) values (?,?)");
 
         assertThat(dao.listAll("select * from members")).contains(member);
@@ -40,5 +35,23 @@ public class MemberTest {
 
     private String pickOne(String[] strings) {
         return strings[new Random().nextInt(strings.length)];
+    }
+
+    public Member getSampleMember()
+    {
+        String memberName = pickOne(new String[] {"Kriss", "Kalmar", "Andre", "Tredje"});
+        String memberEmail = pickOne(new String[] {"Kriss@tull.com", "Kalmartull.com", "Andretull.com", "Tredjetull.com"});
+        Member member = new Member(memberName,memberEmail);
+        return member;
+    }
+
+    public JdbcDataSource getDataSource()
+    {
+        dataSource = new JdbcDataSource();
+        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+
+        Flyway.configure().dataSource(dataSource).load().migrate();
+
+        return dataSource;
     }
 }
