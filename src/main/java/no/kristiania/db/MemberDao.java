@@ -18,12 +18,11 @@ public class MemberDao {
 
     public MemberDao(DataSource dataSource) { this.dataSource = dataSource; }
 
-    public void insertMembers(String memberName) throws SQLException {
-
+    public void insertMembers(Member member) throws SQLException {
         try (Connection conn = dataSource.getConnection();) {
             PreparedStatement statement = conn.prepareStatement(
-                    "insert into members (name) values (?)");
-            insertMember(memberName, statement);
+                    "insert into members (name,email) values (?,?)");
+            insertMember(member, statement);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,21 +31,29 @@ public class MemberDao {
 
     }
 
-    private void insertMember(String memberName, PreparedStatement statement) throws SQLException {
-        statement.setString(1, memberName);
+    private void insertMember(Member member, PreparedStatement statement) throws SQLException {
+        statement.setString(1, member.getName());
+        statement.setString(2,member.getEmail());
     }
 
+    public Member readObject(ResultSet rs) throws SQLException {
+        String name = rs.getString("name");
+        String email = rs.getString("email");
+        Member member = new Member(name,email);
+        return member;
+    }
 
-    public List<String> listAll() throws SQLException {
+    public List<Member> listAll() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
                     "select * from members"
             )) {
                 try (ResultSet rs = statement.executeQuery()) {
-                    List<String> result = new ArrayList<>();
+                    List<Member> result = new ArrayList<>();
 
                     while (rs.next()) {
-                        result.add(readName(rs));
+
+                        result.add(readObject(rs));
                     }
                     return result;
                 }
@@ -54,23 +61,24 @@ public class MemberDao {
         }
     }
 
-    private String readName(ResultSet rs) throws SQLException {
-        return rs.getString("name");
-    }
 
     public static void main(String[] args) throws SQLException, IOException {
-        System.out.println("Enter a member to insert");
+        System.out.println("Enter a member name to insert");
         String memberName = new Scanner(System.in).nextLine();
+
+        System.out.println("Enter member email");
+        String memberEmail = new Scanner(System.in).nextLine();
 
         Properties properties = new Properties();
         properties.load(new FileReader("task-manager.properties"));
 
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/member");
-        dataSource.setUser("member");
+        dataSource.setUrl(properties.getProperty("dataSource.url"));
+        dataSource.setUser(properties.getProperty("dataSource.username"));
         dataSource.setPassword(properties.getProperty("dataSource.password"));
         MemberDao memberDao = new MemberDao(dataSource);
-        memberDao.insertMembers(memberName);
+
+        memberDao.insertMembers(new Member(memberName, memberEmail));
 
         System.out.println(memberDao.listAll());
     }

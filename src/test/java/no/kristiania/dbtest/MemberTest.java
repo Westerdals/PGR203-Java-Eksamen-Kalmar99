@@ -1,6 +1,6 @@
 package no.kristiania.dbtest;
 
-import no.kristiania.db.MemberDao;
+import no.kristiania.db.*;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,12 @@ public class MemberTest {
 
         MemberDao dao = new MemberDao(dataSource);
         String memberName = pickOne(new String[] {"Kriss", "Kalmar", "Andre", "Tredje"});
-        dao.insertMembers(memberName);
-        assertThat(dao.listAll()).contains(memberName);
+        String memberEmail = pickOne(new String[] {"Kriss@tull.com", "Kalmartull.com", "Andretull.com", "Tredjetull.com"});
+        Member member = new Member(memberName,memberEmail);
+
+        dao.insertMembers(member);
+
+        assertThat(dao.listAll()).contains(member);
     }
 
     private String pickOne(String[] strings) {
