@@ -25,7 +25,7 @@ public class MemberTest {
         String memberEmail = pickOne(new String[] {"Kriss@tull.com", "Kalmartull.com", "Andretull.com", "Tredjetull.com"});
         Member member = new Member(memberName,memberEmail);
 
-        dao.insertMembers(member);
+        dao.insert(member,"insert into members (name,email) values (?,?)");
 
         assertThat(dao.listAll()).contains(member);
     }

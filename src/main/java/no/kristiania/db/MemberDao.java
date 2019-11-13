@@ -3,7 +3,6 @@ package no.kristiania.db;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
@@ -12,53 +11,24 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class MemberDao {
+public class MemberDao extends AbstractDao<Member> {
 
-    private DataSource dataSource;
-
-    public MemberDao(DataSource dataSource) { this.dataSource = dataSource; }
-
-    public void insertMembers(Member member) throws SQLException {
-        try (Connection conn = dataSource.getConnection();) {
-            PreparedStatement statement = conn.prepareStatement(
-                    "insert into members (name,email) values (?,?)");
-            insertMember(member, statement);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
+    public MemberDao(DataSource dataSource) {
+        super(dataSource);
     }
 
-    private void insertMember(Member member, PreparedStatement statement) throws SQLException {
+    @Override
+    protected void insertObject(Member member, PreparedStatement statement) throws SQLException {
         statement.setString(1, member.getName());
         statement.setString(2,member.getEmail());
     }
 
+    @Override
     public Member readObject(ResultSet rs) throws SQLException {
         String name = rs.getString("name");
         String email = rs.getString("email");
         Member member = new Member(name,email);
         return member;
-    }
-
-    public List<Member> listAll() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "select * from members"
-            )) {
-                try (ResultSet rs = statement.executeQuery()) {
-                    List<Member> result = new ArrayList<>();
-
-                    while (rs.next()) {
-
-                        result.add(readObject(rs));
-                    }
-                    return result;
-                }
-            }
-        }
     }
 
 
@@ -78,7 +48,7 @@ public class MemberDao {
         dataSource.setPassword(properties.getProperty("dataSource.password"));
         MemberDao memberDao = new MemberDao(dataSource);
 
-        memberDao.insertMembers(new Member(memberName, memberEmail));
+        memberDao.insert(new Member(memberName, memberEmail),"insert into members (name,email) values (?,?)");
 
         System.out.println(memberDao.listAll());
     }
