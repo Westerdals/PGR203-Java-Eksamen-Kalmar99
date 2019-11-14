@@ -26,9 +26,10 @@ public class ProjectDao extends AbstractDao<Project> {
 
     @Override
     public Project readObject(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
         String projectName = rs.getString("name");
         String status = rs.getString("status");
-        Project project = new Project(projectName,status);
+        Project project = new Project(projectName,status,id);
         return project;
     }
 

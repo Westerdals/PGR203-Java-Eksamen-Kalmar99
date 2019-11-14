@@ -4,15 +4,28 @@ import java.util.Objects;
 
 public class Member {
 
-    public String name;
-    public String email;
-
+    private String name;
+    private String email;
+    private int id;
 
     public Member(String name, String email)
     {
         this.name = name;
         this.email = email;
     }
+
+    public Member(String name, String email,int id)
+    {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
 
     public String getName() {
         return this.name;

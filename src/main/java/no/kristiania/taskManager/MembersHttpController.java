@@ -4,6 +4,7 @@ import no.kristiania.db.Member;
 import no.kristiania.db.MemberDao;
 import no.kristiania.httpserver.HttpController;
 import no.kristiania.httpserver.HttpServer;
+import org.logevents.util.JsonUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class MembersHttpController implements HttpController {
 
 
-    private MemberDao memberDao;
+    MemberDao memberDao;
 
     public MembersHttpController(MemberDao memberDao) {
 
@@ -29,10 +30,12 @@ public class MembersHttpController implements HttpController {
         try {
             if(requestAction.equals("POST"))
             {
+
                 requestParameters = HttpServer.parseQueryString(body);
 
                 String name = URLDecoder.decode(requestParameters.get("memberName"), StandardCharsets.UTF_8.toString());
                 String email = URLDecoder.decode(requestParameters.get("email"), StandardCharsets.UTF_8.toString());
+
 
 
                 Member member = new Member(name,email);
@@ -48,9 +51,11 @@ public class MembersHttpController implements HttpController {
             }
             //Handle Member Request!
             //create response
+            String responseBody;
             String statusCode = "200";
             String contentType = "text/html";
-            String responseBody = getBody();
+
+            responseBody = getBody();
 
             outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
                     "Content-length: " + responseBody.length() + "\r\n" +
@@ -70,8 +75,9 @@ public class MembersHttpController implements HttpController {
 
     public String getBody() throws SQLException {
         String body = memberDao.listAll("SELECT * FROM Members").stream()
-                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getEmail()))
+                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getId(),p.getName(),p.getEmail()))
                 .collect(Collectors.joining(""));
         return body;
     }
+
 }

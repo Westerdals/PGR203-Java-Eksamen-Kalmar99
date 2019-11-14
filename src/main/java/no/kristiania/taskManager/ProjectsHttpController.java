@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ProjectsHttpController implements HttpController {
 
 
-    private ProjectDao projectDao;
+    ProjectDao projectDao;
 
     public ProjectsHttpController(ProjectDao projectDao) {
 
@@ -71,7 +71,7 @@ public class ProjectsHttpController implements HttpController {
 
     public String getBody() throws SQLException {
         String body = projectDao.listAll("SELECT * FROM projects").stream()
-                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getStatus()))
+                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getId(),p.getName(),p.getStatus()))
                 .collect(Collectors.joining(""));
         return body;
     }

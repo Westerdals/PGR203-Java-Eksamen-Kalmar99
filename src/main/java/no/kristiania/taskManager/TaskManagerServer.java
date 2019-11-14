@@ -37,6 +37,8 @@ public class TaskManagerServer {
         server.setFileLocation("src/main/resources/task-manager");
         server.addController("/api/members",new MembersHttpController(new MemberDao(dataSource)));
         server.addController("/api/projects",new ProjectsHttpController(new ProjectDao(dataSource)));
+        server.addController("/api/members/memberSelect",new MemberSelectHttpController(new MemberDao(dataSource)));
+        server.addController("/api/projects/projectSelect",new ProjectsSelectHttpControll(new ProjectDao(dataSource)));
     }
 
     public static void main(String[] args) throws IOException {

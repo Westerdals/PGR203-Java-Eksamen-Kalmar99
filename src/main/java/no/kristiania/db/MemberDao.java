@@ -24,9 +24,10 @@ public class MemberDao extends AbstractDao<Member> {
 
     @Override
     public Member readObject(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
         String name = rs.getString("name");
         String email = rs.getString("email");
-        Member member = new Member(name,email);
+        Member member = new Member(name,email,id);
         return member;
     }
 
