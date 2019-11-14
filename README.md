@@ -1,4 +1,4 @@
-# PG203 Mappeinnlevering for gruppe <wiseflow gruppenummer>
+# PG203 Mappeinnlevering for gruppe <>
 
 *Dette er en mal som det anbefales at dere følger for `README.md`-filen til hovedinnleveringen i PGR203* 
 

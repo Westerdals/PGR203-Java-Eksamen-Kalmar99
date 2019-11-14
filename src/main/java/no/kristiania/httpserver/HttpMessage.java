@@ -15,28 +15,42 @@ public class HttpMessage {
     public HttpMessage(InputStream inputStream) throws IOException {
         startLine = readLine(inputStream);
 
-
-        System.out.println("------------------------ New Request ------------------------");
-
-        System.out.println(startLine);
-        String headerLine;
-
-
         //Get the header line
+        headers = readHeaders(inputStream);
+
+        body = readBody(headers,inputStream);
+
+        if (getHeader("Content-length") != null)
+        {
+            body = readBytes(inputStream, Integer.parseInt(getHeader("Content-length")));
+        }
+
+    }
+
+    static String readBody(Map<String, String> headers, InputStream inputStream) throws IOException {
+        if(headers.containsKey("Content-length")) {
+            StringBuilder body = new StringBuilder();
+            for(int i = 0; i < Integer.parseInt(headers.get("Content-length")); i++)
+            {
+                body.append((char)inputStream.read());
+            }
+            return body.toString();
+        } else
+        {
+            return null;
+        }
+    }
+
+    static Map<String, String> readHeaders(InputStream inputStream) throws IOException {
+        Map<String,String> headers = new HashMap<>();
+        String headerLine;
         while(!(headerLine = readLine(inputStream)).isBlank())
         {
-
             int colonPos = headerLine.indexOf(':');
-            String headerName = headerLine.substring(0,colonPos).trim();
-            String headerValue = headerLine.substring(colonPos+1).trim();
-            System.out.println("Header: " + headerName + " -> " + headerValue);
-            headers.put(headerName.toLowerCase(),headerValue);
+            headers.put(headerLine.substring(0,colonPos).trim().toLowerCase(),
+                    headerLine.substring(colonPos+1).trim());
         }
-        if (getHeader("content-length") != null)
-        {
-            this.body = readBytes(inputStream, Integer.parseInt(getHeader("content-length")));
-        }
-        System.out.println("-------------------------------------------------------------");
+        return headers;
     }
 
     public int getStatusCode()
@@ -51,7 +65,7 @@ public class HttpMessage {
     }
 
     public int getContentLength() {
-        return Integer.parseInt(getHeader("content-length"));
+        return Integer.parseInt(getHeader("Content-length"));
     }
 
     public static String readLine(InputStream inputStream) throws IOException {

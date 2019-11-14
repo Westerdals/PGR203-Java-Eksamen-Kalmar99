@@ -7,5 +7,5 @@ import java.util.Map;
 public interface HttpController {
 
 
-    void handle(String requestPath, OutputStream outputStream, Map<String, String> requestParameters) throws IOException;
+    void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException;
 }

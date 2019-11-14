@@ -7,13 +7,10 @@ import no.kristiania.httpserver.HttpServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 class HttpServerTest {
 
@@ -53,5 +50,16 @@ class HttpServerTest {
         HttpClientResponse response = client.execute();
         assertEquals("HelloWorld",response.getBody());
 
+    }
+    @Test
+    void shouldParsePostParameters() throws IOException {
+
+        String formBody = "content-type=text/html&body=foobar";
+        HttpClient client = new HttpClient("localhost",server.getPort(),"/echo?" + formBody);
+        client.setRequestHeader("content-type","application/x-www-form-urlencoded");
+        client.setBody(formBody);
+        HttpClientResponse response = client.execute("POST");
+        assertThat(response.getHeader("content-type")).isEqualTo("text/html");
+        assertThat(response.getBody()).isEqualTo("foobar");
     }
 }

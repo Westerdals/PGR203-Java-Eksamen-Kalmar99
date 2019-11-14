@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import static no.kristiania.httpserver.HttpMessage.readHeaders;
+
 public class HttpServer {
 
     private static int port;
@@ -54,9 +56,11 @@ public class HttpServer {
                 HttpServerRequest request = new HttpServerRequest(socket.getInputStream());
 
                 String requestLine = request.getStartLine();
-
+                Map<String, String> headers = request.headers;
+                String body = request.body;
 
                 //Get target ex: /index.html
+                String requestAction = requestLine.split(" ")[0];
                 String requestTarget = requestLine.split(" ")[1];
                 int questionPos = requestTarget.indexOf('?');
                 String requestPath = questionPos == -1 ? requestTarget : requestTarget.substring(0, questionPos);
@@ -64,7 +68,7 @@ public class HttpServer {
 
                 controllers
                         .getOrDefault(requestPath,defaultController)
-                        .handle(requestPath,socket.getOutputStream(), requestParameters);
+                        .handle(requestAction,requestPath,socket.getOutputStream(),body,requestParameters);
 
 
             } catch (IOException e) {
@@ -73,20 +77,24 @@ public class HttpServer {
         }
     }
 
-    private Map<String, String> parseRequestParameters(String requestTarget) {
-        Map<String,String> requestParameters = new HashMap<>();
-        int questionPos = requestTarget.indexOf("?");
-        if (questionPos != -1)
+    static Map<String, String> parseRequestParameters(String requestTarget) {
+        int questionPos = requestTarget.indexOf('?');
+        if (questionPos > 0)
         {
             String query = requestTarget.substring(questionPos+1);
-            for (String parameter : query.split("&")) {
-                int equalsPos = parameter.indexOf("=");
-                String parameterValue = parameter.substring(equalsPos+1);
-                String parameterName = parameter.substring(0,equalsPos);
-                //Puts request parameters in a hash map.
-                requestParameters.put(parameterName,parameterValue);
-            }
+            return parseQueryString(query);
+        }
+        return new HashMap<>();
+    }
 
+    static Map<String, String> parseQueryString(String query) {
+        Map<String,String> requestParameters = new HashMap<>();
+        for (String parameter : query.split("&")) {
+            int equalsPos = parameter.indexOf('=');
+            String parameterValue = parameter.substring(equalsPos+1);
+            String parameterName = parameter.substring(0,equalsPos);
+            //Puts request parameters in a hash map.
+            requestParameters.put(parameterName,parameterValue);
         }
         return requestParameters;
     }

@@ -15,7 +15,7 @@ class FileHttpController implements HttpController {
     }
 
     @Override
-    public void handle(String requestPath, OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+    public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException {
         File file = new File(httpServer.getFileLocation() + requestPath);
         if(file.isDirectory())
         {

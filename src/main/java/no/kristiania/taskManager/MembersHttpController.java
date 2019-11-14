@@ -20,18 +20,18 @@ public class MembersHttpController implements HttpController {
     }
 
     @Override
-    public void handle(String requestPath, OutputStream outputStream, Map<String, String> requestParameters) throws IOException{
+    public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException{
         try {
             //Handle Member Request!
             //get parameters
             String statusCode = "200";
             String contentType = "text/html";
-            String body = getBody();
+            String responseBody = getBody();
 
             outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
-                    "Content-length: " + body.length() + "\r\n" +
+                    "Content-length: " + responseBody.length() + "\r\n" +
                     "\r\n" +
-                    body).getBytes());
+                    responseBody).getBytes());
         } catch (SQLException e) {
             String message = e.toString();
 
