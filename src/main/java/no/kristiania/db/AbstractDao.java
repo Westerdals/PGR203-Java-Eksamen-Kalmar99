@@ -16,7 +16,7 @@ public abstract class AbstractDao<T> {
         this.dataSource = dataSource;
     }
 
-    public void insert(T member, String sql) throws SQLException {
+    public void insert(T member, String sql){
         try (Connection conn = dataSource.getConnection();) {
             PreparedStatement statement = conn.prepareStatement(sql);
             insertObject(member, statement);

@@ -1,7 +1,9 @@
 package no.kristiania.taskManager;
 
+import no.kristiania.db.Member;
 import no.kristiania.db.MemberDao;
 import no.kristiania.httpserver.HttpController;
+import no.kristiania.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,10 +22,25 @@ public class MembersHttpController implements HttpController {
     }
 
     @Override
-    public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException{
+    public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException {
+
         try {
+            if(requestAction.equals("POST"))
+            {
+                requestParameters = HttpServer.parseQueryString(body);
+
+
+                Member member = new Member(requestParameters.get("memberName"),requestParameters.get("email"));
+                System.out.println("Created new member with name: " + member.getName() + "And Email: " + member.getEmail());
+                memberDao.insert(member,"insert into members (name,email) values (?,?)");
+                outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
+                        "Location: http://localhost:8080/\r\n"+
+                        "Connection: close\r\n"+
+                        "\r\n").getBytes());
+                return;
+            }
             //Handle Member Request!
-            //get parameters
+            //create response
             String statusCode = "200";
             String contentType = "text/html";
             String responseBody = getBody();

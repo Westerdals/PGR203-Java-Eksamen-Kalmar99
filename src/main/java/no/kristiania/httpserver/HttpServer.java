@@ -43,7 +43,7 @@ public class HttpServer {
         server.start();
     }
 
-    public void start() throws IOException {
+    public void start(){
         new Thread(this::run).start();
     }
 
@@ -54,8 +54,9 @@ public class HttpServer {
 
                 //Get request
                 HttpServerRequest request = new HttpServerRequest(socket.getInputStream());
-
                 String requestLine = request.getStartLine();
+                if (requestLine.isBlank()) continue;
+
                 Map<String, String> headers = request.headers;
                 String body = request.body;
 
@@ -87,7 +88,7 @@ public class HttpServer {
         return new HashMap<>();
     }
 
-    static Map<String, String> parseQueryString(String query) {
+    public static Map<String, String> parseQueryString(String query) {
         Map<String,String> requestParameters = new HashMap<>();
         for (String parameter : query.split("&")) {
             int equalsPos = parameter.indexOf('=');

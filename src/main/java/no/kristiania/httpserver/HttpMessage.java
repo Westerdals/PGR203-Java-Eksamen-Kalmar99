@@ -20,6 +20,8 @@ public class HttpMessage {
 
         body = readBody(headers,inputStream);
 
+
+
         if (getHeader("Content-length") != null)
         {
             body = readBytes(inputStream, Integer.parseInt(getHeader("Content-length")));
