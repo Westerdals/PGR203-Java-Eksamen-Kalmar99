@@ -1,7 +1,8 @@
 package no.kristiania.taskManager;
 
-import no.kristiania.db.Member;
-import no.kristiania.db.MemberDao;
+
+import no.kristiania.db.Project;
+import no.kristiania.db.ProjectDao;
 import no.kristiania.httpserver.HttpController;
 import no.kristiania.httpserver.HttpServer;
 
@@ -13,40 +14,40 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MembersHttpController implements HttpController {
+public class ProjectsHttpController implements HttpController {
 
 
-    private MemberDao memberDao;
+    private ProjectDao projectDao;
 
-    public MembersHttpController(MemberDao memberDao) {
+    public ProjectsHttpController(ProjectDao projectDao) {
 
-        this.memberDao = memberDao;
+        this.projectDao = projectDao;
     }
 
     @Override
     public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException {
+
 
         try {
             if(requestAction.equals("POST"))
             {
                 requestParameters = HttpServer.parseQueryString(body);
 
-                String name = URLDecoder.decode(requestParameters.get("memberName"), StandardCharsets.UTF_8.toString());
-                String email = URLDecoder.decode(requestParameters.get("email"), StandardCharsets.UTF_8.toString());
 
+                String name = URLDecoder.decode(requestParameters.get("projectName"), StandardCharsets.UTF_8.toString());
+                String status = URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString());
 
-                Member member = new Member(name,email);
-
-
-                System.out.println("Created new member with name: " + member.getName() + "And Email: " + member.getEmail());
-                memberDao.insert(member,"insert into members (name,email) values (?,?)");
+                Project project = new Project(name,status);
+                System.out.println("Created new Project with name: " + project.getName() + "And Status: " + project.getStatus());
+                projectDao.insert(project,"insert into projects (name,status) values (?,?)");
                 outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
                         "Location: http://localhost:8080/\r\n"+
                         "Connection: close\r\n"+
                         "\r\n").getBytes());
                 return;
             }
-            //Handle Member Request!
+
+
             //create response
             String statusCode = "200";
             String contentType = "text/html";
@@ -69,9 +70,12 @@ public class MembersHttpController implements HttpController {
     }
 
     public String getBody() throws SQLException {
-        String body = memberDao.listAll("SELECT * FROM Members").stream()
-                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getEmail()))
+        String body = projectDao.listAll("SELECT * FROM projects").stream()
+                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getStatus()))
                 .collect(Collectors.joining(""));
         return body;
     }
-}
+
+
+    }
+

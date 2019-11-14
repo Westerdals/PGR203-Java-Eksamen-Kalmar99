@@ -5,30 +5,28 @@ import java.util.Objects;
 public class Project {
 
     private String name;
-    private Boolean status;
+    private String status;
 
-    public Project(String name, Boolean status)
+    public Project(String name, String status)
     {
         this.name = name;
         this.status = status;
+    }
 
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setStatus (Boolean status) {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public Boolean getStatus() {
-        return this.status;
     }
 
     @Override

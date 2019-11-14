@@ -11,15 +11,17 @@
 <div>
     <a href="newMember.html">Add New Member</a>
     <br>
-    <a href="#newProject">Add new project</a>
+    <a href="newProjectTask.html">Add new project task</a>
 </div>
 
 <h3>
     Members:
     <hr>
 </h3>
-<table id="projectMembers">
-
+<table id="projectMembers"></table>
+<h3>Project Tasks</h3>
+<hr>
+<table id="projects">
 
 </table>
 </body>
@@ -33,6 +35,17 @@
         "        <th>Email</th>\n" +
         "    </tr>  " + text;
         document.getElementById("projectMembers").innerHTML = text.toString();
+    });
+
+    fetch("/api/projects")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        text = "<tr>\n" +
+            "        <th>Project Name</th>\n" +
+            "        <th>Project Status</th>\n" +
+            "    </tr>  " + text;
+        document.getElementById("projects").innerHTML = text.toString();
     });
 </script>
 </html>

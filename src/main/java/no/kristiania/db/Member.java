@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Member {
 
-    private String name;
-    private String email;
-    private int id;
+    public String name;
+    public String email;
+
 
     public Member(String name, String email)
     {
@@ -14,22 +14,20 @@ public class Member {
         this.email = email;
     }
 
+    public String getName() {
+        return this.name;
+    }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -44,9 +42,5 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(name, email);
-    }
-
-    public int getId() {
-        return this.id;
     }
 }

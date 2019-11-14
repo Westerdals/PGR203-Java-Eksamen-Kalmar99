@@ -2,12 +2,9 @@ package no.kristiania.dbtest;
 
 import no.kristiania.db.Project;
 import no.kristiania.db.ProjectDao;
-import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
 
 import java.sql.SQLException;
 import java.util.Random;
@@ -33,17 +30,17 @@ public class ProjectDaoTest {
         assertThat(dao.listAll("select * from projects")).contains(project);
     }
 
-    public Project getSampleProject()
+    public static Project getSampleProject()
     {
         String projectTitle = pickOne(new String[]{"Hilse","Hoppe","Bestå"});
-        Boolean status = pickBool(new Boolean[] {true,false});
+        String status = pickOne(new String[] {"In Progress","Done"});
 
         Project testProject = new Project(projectTitle,status);
         return testProject;
     }
 
 
-    private String pickOne(String[] strings) {
+    private static String pickOne(String[] strings) {
         return strings[new Random().nextInt(strings.length)];
     }
     private Boolean pickBool(Boolean[] bools) {

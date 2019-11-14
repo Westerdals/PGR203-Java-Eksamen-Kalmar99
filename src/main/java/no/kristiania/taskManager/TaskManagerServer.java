@@ -1,6 +1,7 @@
 package no.kristiania.taskManager;
 
 import no.kristiania.db.MemberDao;
+import no.kristiania.db.ProjectDao;
 import no.kristiania.httpserver.HttpServer;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
@@ -35,6 +36,7 @@ public class TaskManagerServer {
         server = new HttpServer(port);
         server.setFileLocation("src/main/resources/task-manager");
         server.addController("/api/members",new MembersHttpController(new MemberDao(dataSource)));
+        server.addController("/api/projects",new ProjectsHttpController(new ProjectDao(dataSource)));
     }
 
     public static void main(String[] args) throws IOException {
