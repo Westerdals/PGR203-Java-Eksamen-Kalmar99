@@ -5,16 +5,24 @@ import no.kristiania.db.ProjectDao;
 import no.kristiania.db.ProjectMemberDao;
 import no.kristiania.httpserver.HttpServer;
 import org.flywaydb.core.Flyway;
-import org.h2.jdbcx.JdbcDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
-import org.postgresql.jdbc3.Jdbc3SimpleDataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+
+
+
+
+
 public class TaskManagerServer {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskManagerServer.class);
     private HttpServer server;
 
     TaskManagerServer(int port) throws IOException {
@@ -35,6 +43,9 @@ public class TaskManagerServer {
         Flyway.configure().dataSource(dataSource).load().migrate();
 
         server = new HttpServer(port);
+
+        logger.info("Started on: http//localhost:{}", server.getPort());
+
         server.setFileLocation("src/main/resources/task-manager");
         server.addController("/api/members",new MembersHttpController(new MemberDao(dataSource)));
         server.addController("/api/projects",new ProjectsHttpController(new ProjectDao(dataSource)));
@@ -48,6 +59,7 @@ public class TaskManagerServer {
 
     public static void main(String[] args) throws IOException {
         new TaskManagerServer(8080).start();
+
     }
 
     private void start() throws IOException {

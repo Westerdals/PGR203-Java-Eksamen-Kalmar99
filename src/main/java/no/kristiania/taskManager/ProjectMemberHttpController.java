@@ -36,7 +36,7 @@ public class ProjectMemberHttpController implements HttpController {
                 String mname = URLDecoder.decode(requestParameters.get("memberSelect"), StandardCharsets.UTF_8.toString());
 
 
-                ProjectMember pmember = new ProjectMember(pname,mname);
+                ProjectMember pmember = new ProjectMember(mname,pname);
 
                 pmemberDao.insert(pmember, "insert into project_member (projectName,memberName) values (?,?)");
                 outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
@@ -46,7 +46,7 @@ public class ProjectMemberHttpController implements HttpController {
                 return;
             }
 
-            //Handle Member Request!
+
             //create response
             String responseBody;
             String statusCode = "200";
@@ -56,6 +56,7 @@ public class ProjectMemberHttpController implements HttpController {
 
             outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
                     "Content-length: " + responseBody.length() + "\r\n" +
+                    "Connection: close\r\n" +
                     "\r\n" +
                     responseBody).getBytes());
 

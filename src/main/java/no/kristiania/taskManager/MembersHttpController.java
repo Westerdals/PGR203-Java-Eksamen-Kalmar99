@@ -4,7 +4,8 @@ import no.kristiania.db.Member;
 import no.kristiania.db.MemberDao;
 import no.kristiania.httpserver.HttpController;
 import no.kristiania.httpserver.HttpServer;
-import org.logevents.util.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class MembersHttpController implements HttpController {
 
-
+    public static final Logger logger = LoggerFactory.getLogger(MembersHttpController.class);
     MemberDao memberDao;
 
     public MembersHttpController(MemberDao memberDao) {
@@ -41,7 +42,8 @@ public class MembersHttpController implements HttpController {
                 Member member = new Member(name,email);
 
 
-                System.out.println("Created new member with name: " + member.getName() + "And Email: " + member.getEmail());
+                logger.info("Inserted Member with name: {} and email: {} to members database",member.getName(),member.getEmail());
+
                 memberDao.insert(member,"insert into members (name,email) values (?,?)");
                 outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
                         "Location: http://localhost:8080/\r\n"+
@@ -49,20 +51,21 @@ public class MembersHttpController implements HttpController {
                         "\r\n").getBytes());
                 return;
             }
-            //Handle Member Request!
-            //create response
-            String responseBody;
+
+            String responseBody = getBody();
             String statusCode = "200";
             String contentType = "text/html";
 
-            responseBody = getBody();
-
             outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
                     "Content-length: " + responseBody.length() + "\r\n" +
+                    "Connection: close\r\n" +
                     "\r\n" +
                     responseBody).getBytes());
+
         } catch (SQLException e) {
             String message = e.toString();
+            logger.error("Critical ERROR:{}",message);
+
 
             outputStream.write(("HTTP/1.1 500 Internal server error\r\n" +
                     "Content-length: " + message.length() + "\r\n" +

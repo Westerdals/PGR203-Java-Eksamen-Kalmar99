@@ -55,6 +55,7 @@ public class ProjectsHttpController implements HttpController {
 
             outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
                     "Content-length: " + responseBody.length() + "\r\n" +
+                    "Connection: close\r\n" +
                     "\r\n" +
                     responseBody).getBytes());
         } catch (SQLException e) {

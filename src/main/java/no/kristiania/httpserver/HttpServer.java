@@ -1,8 +1,9 @@
 package no.kristiania.httpserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,10 +18,10 @@ import static no.kristiania.httpserver.HttpMessage.readHeaders;
 
 public class HttpServer {
 
+    private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
     private static int port;
     private ServerSocket serverSocket;
     private String fileLocation;
-
 
 
 
@@ -38,13 +39,13 @@ public class HttpServer {
     public static void main(String[] args) throws IOException {
 
         HttpServer server = new HttpServer(8080);
-        System.out.println("Server running at: localhost:" + server.getPort());
         server.setFileLocation("src/main/resources");
         server.start();
     }
 
     public void start(){
         new Thread(this::run).start();
+        logger.info("Started on: http://localhost: {}",getPort());
     }
 
     private void run(){

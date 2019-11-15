@@ -25,7 +25,7 @@ public class ProjectMemberDao extends AbstractDao<ProjectMember>{
     public ProjectMember readObject(ResultSet rs) throws SQLException {
         String name = rs.getString("projectName");
         String member = rs.getString("memberName");
-        return new ProjectMember(name,member);
+        return new ProjectMember(member,name);
 
     }
 
