@@ -1,11 +1,13 @@
 package no.kristiania.db;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Project {
 
     private String name;
     private String status;
+    private ArrayList<String> members = new ArrayList<>();
     int id;
 
     public Project(String name, String status)
@@ -23,6 +25,22 @@ public class Project {
 
     public int getId() {
         return id;
+    }
+
+    public void addMember(String member)
+    {
+        members.add(member);
+    }
+
+    public String getMembers()
+    {
+        String returnthis = "";
+        for(String member : members)
+        {
+            returnthis += member + ", ";
+        }
+
+        return returnthis;
     }
 
     public String getName() {

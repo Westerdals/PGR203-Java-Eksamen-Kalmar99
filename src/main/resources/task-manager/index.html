@@ -44,14 +44,14 @@
         document.getElementById("projectMembers").innerHTML = text.toString();
     });
 
-    fetch("/api/projects")
+    fetch("/api/members/projectMember")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
         text = "<tr>\n" +
-                "<th>Id</th>" +
-            "        <th>Project Name</th>\n" +
-            "        <th>Project Status</th>\n" +
+                "<th>Name</th>" +
+            "        <th>Status</th>\n" +
+            "        <th>Members</th>\n" +
             "    </tr>  " + text;
         document.getElementById("projects").innerHTML = text.toString();
     });
