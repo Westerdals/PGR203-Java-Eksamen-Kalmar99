@@ -28,6 +28,26 @@ public abstract class AbstractDao<T> {
 
     }
 
+    protected void delete(int id, String name, String sql1, String sql2) {
+        try (Connection conn = dataSource.getConnection();) {
+            PreparedStatement statement = conn.prepareStatement(sql1);
+            statement.setInt(1,id);
+
+            PreparedStatement statement2 = conn.prepareStatement(sql2);
+            statement2.setString(1,name);
+
+            int status = statement.executeUpdate();
+            if(status <= 0)
+            {
+                MemberDao.logger.error("No data was found at ID:{} and name: {}, no data was deleted!",id,name);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            MemberDao.logger.error("SQL Exception: " + e);
+        }
+    }
+
     protected abstract void insertObject(T member, PreparedStatement statement) throws SQLException;
 
     public abstract T readObject(ResultSet rs) throws SQLException;

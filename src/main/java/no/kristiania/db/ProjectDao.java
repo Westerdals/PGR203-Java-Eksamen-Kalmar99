@@ -32,28 +32,7 @@ public class ProjectDao extends AbstractDao<Project> {
 
     public void removeObject(int id,String name)
     {
-        try (Connection conn = dataSource.getConnection();) {
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM projects WHERE id = (?)");
-            statement.setInt(1,id);
-            int status = statement.executeUpdate();
-
-            if(status <= 0)
-            {
-                logger.error("1: No data was found at ID:{} and name: {}, no data was deleted!",id,name);
-            }
-
-            PreparedStatement statement2 = conn.prepareStatement("DELETE FROM project_member WHERE projectname = (?)");
-            statement2.setString(1,name);
-
-
-
-
-
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        delete(id,name,"DELETE FROM projects WHERE id = (?)","DELETE FROM project_member WHERE projectname = (?)");
     }
 
 
