@@ -19,17 +19,26 @@
     <hr>
 </h3>
 <table id="projectMembers"></table>
-<h3>Project Tasks</h3>
+
+<h3>Project Tasks With assigned members</h3>
 <hr>
 <table id="projects">
 
 </table>
+
 <h3>Add Member to Project Task</h3>
 <form method="POST" action="/api/members/projectMember" >
     <label>Member <select id="memberSelect" name="memberSelect"></select> </label>
     <label>Task <select id="taskSelect" name="TaskSelect"></select> </label>
     <button>Add</button>
 </form>
+
+
+<h3>All Tasks</h3>
+<hr>
+<table id="projectsWithOutMembers">
+
+</table>
 </body>
 <script>
     fetch("/api/members")
@@ -71,6 +80,17 @@
         document.getElementById("taskSelect").innerHTML = text.toString();
     });
 
+    fetch("/api/projects")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        text = "<tr>\n" +
+            "<th>ID</th>" +
+            "        <th>Name</th>\n" +
+            "        <th>Status</th>\n" +
+            "    </tr>  " + text;
+        document.getElementById("projectsWithOutMembers").innerHTML = text.toString();
+    });
 
 
 
