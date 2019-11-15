@@ -2,6 +2,8 @@ package no.kristiania.taskManager;
 
 import no.kristiania.db.Member;
 import no.kristiania.db.MemberDao;
+import no.kristiania.db.ProjectMember;
+import no.kristiania.db.ProjectMemberDao;
 import no.kristiania.dbtest.MemberDaoTest;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,5 +51,21 @@ public class MembersHttpControllerTest {
                 .contains(new Member("TestMember","test@example.com"));
     }
 
+    @Test
+    void shouldAddMemberToProject() throws IOException, SQLException {
+       ProjectMemberDao projectMemberDao = new ProjectMemberDao(dataSource);
 
-}
+        ProjectMemberHttpController controller = new ProjectMemberHttpController(projectMemberDao);
+
+        String requestBody = "memberSelect=Ola+Nordmann&TaskSelect=Gj%C3%B8re+Ferdig+Eksamen";
+        controller.handle("POST","api/members/projectMember",new ByteArrayOutputStream(),requestBody,null);
+
+        assertThat(projectMemberDao.listAll("select * from project_member"))
+                .contains(new ProjectMember("Ola Nordmann","Gjøre Ferdig Eksamen"));
+    }
+
+
+
+    }
+
+
