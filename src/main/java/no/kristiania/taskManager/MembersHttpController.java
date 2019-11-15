@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -29,51 +30,84 @@ public class MembersHttpController implements HttpController {
     public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException {
 
         try {
+            String[] target = requestPath.split("/");
             if(requestAction.equals("POST"))
             {
 
                 requestParameters = HttpServer.parseQueryString(body);
+                if(target[3].equals("add"))
+                {
+                    addMember(outputStream, requestParameters);
+                    return;
+                } else if (target[3].equals("remove"))
+                {
+                    //remove
+                    removeMember(outputStream,requestParameters);
+                }
 
-                String name = URLDecoder.decode(requestParameters.get("memberName"), StandardCharsets.UTF_8.toString());
-                String email = URLDecoder.decode(requestParameters.get("email"), StandardCharsets.UTF_8.toString());
-
-
-
-                Member member = new Member(name,email);
-
-
-                logger.info("Inserted Member with name: {} and email: {} to members database",member.getName(),member.getEmail());
-
-                memberDao.insert(member,"insert into members (name,email) values (?,?)");
-                outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
-                        "Location: http://localhost:8080/\r\n"+
-                        "Connection: close\r\n"+
-                        "\r\n").getBytes());
-                return;
             }
+            String responseBody = "";
 
-            String responseBody = getBody();
-            String statusCode = "200";
-            String contentType = "text/html";
-
-            outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
-                    "Content-length: " + responseBody.length() + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    responseBody).getBytes());
+            if(target[3].equals("select"))
+            {
+                responseBody = getSelectBody();
+            } else { responseBody = getBody(); }
+            sendResponse(outputStream, responseBody, "200 OK", "text/html");
 
         } catch (SQLException e) {
             String message = e.toString();
             logger.error("Critical ERROR:{}",message);
-
-
-            outputStream.write(("HTTP/1.1 500 Internal server error\r\n" +
-                    "Content-length: " + message.length() + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    message).getBytes());
+            sendResponse(outputStream,message,"501 Internal server error","text/html");
         }
 
+    }
+
+    private void removeMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+        int id = Integer.valueOf(URLDecoder.decode(requestParameters.get("id"), StandardCharsets.UTF_8.toString()));
+        //logger.info("Removed member with id: {}",id);
+        memberDao.removeObject(id);
+        redirect(outputStream);
+
+    }
+
+    private void sendResponse(OutputStream outputStream, String responseBody, String statusCode, String contentType) throws IOException {
+        outputStream.write((
+                "HTTP/1.1 " + statusCode + "\r\n" +
+                "Content-type:" + contentType + "\r\n" +
+                "Content-length: " + responseBody.length() + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                responseBody).getBytes());
+    }
+
+    private String getSelectBody() throws SQLException {
+        String body = memberDao.listAll("SELECT * FROM Members").stream()
+                .map(p -> String.format("<option id='%s'> %s </option>",p.getId(),p.getName()))
+                .collect(Collectors.joining(""));
+        return body;
+    }
+
+    private void addMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+        String name = URLDecoder.decode(requestParameters.get("memberName"), StandardCharsets.UTF_8.toString());
+        String email = URLDecoder.decode(requestParameters.get("email"), StandardCharsets.UTF_8.toString());
+
+
+        Member member = new Member(name, email);
+
+
+        logger.info("Inserted Member with name: {} and email: {} to members database", member.getName(), member.getEmail());
+        memberDao.insert(member, "insert into members (name,email) values (?,?)");
+
+        redirect(outputStream);
+        return;
+    }
+
+    private void redirect(OutputStream outputStream) throws IOException {
+        outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
+                "Location: http://localhost:8080/\r\n" +
+                "Connection: close\r\n" +
+                "\r\n").getBytes());
+        return;
     }
 
     public String getBody() throws SQLException {
@@ -82,5 +116,7 @@ public class MembersHttpController implements HttpController {
                 .collect(Collectors.joining(""));
         return body;
     }
+
+
 
 }

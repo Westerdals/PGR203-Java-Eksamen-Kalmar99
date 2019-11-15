@@ -2,6 +2,8 @@ package no.kristiania.db;
 
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.FileReader;
@@ -12,8 +14,26 @@ import java.util.Scanner;
 
 public class MemberDao extends AbstractDao<Member> {
 
+    public static final Logger logger = LoggerFactory.getLogger(MemberDao.class);
     public MemberDao(DataSource dataSource) {
         super(dataSource);
+    }
+
+
+    public void removeObject(int id)
+    {
+        try (Connection conn = dataSource.getConnection();) {
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM members WHERE id = (?)");
+            statement.setInt(1,id);
+            int status = statement.executeUpdate();
+            if(status == 0)
+            {
+                logger.error("No data was found at ID:{}, no data was deleted!",id);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

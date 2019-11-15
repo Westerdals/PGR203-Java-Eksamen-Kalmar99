@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +46,7 @@ public class MembersHttpControllerTest {
         MembersHttpController controller = new MembersHttpController(memberDao);
 
         String requestBody = "memberName=TestMember&email=test@example.com";
-        controller.handle("POST","api/members",new ByteArrayOutputStream(),requestBody,null);
+        controller.handle("POST","/api/members/add",new ByteArrayOutputStream(),requestBody,null);
 
         assertThat(memberDao.listAll("select * from members"))
                 .contains(new Member("TestMember","test@example.com"));
@@ -62,6 +63,21 @@ public class MembersHttpControllerTest {
 
         assertThat(projectMemberDao.listAll("select * from project_member"))
                 .contains(new ProjectMember("Hello","World"));
+    }
+
+    @Test
+    void shouldRemoveMember() throws IOException, SQLException {
+        MemberDao memberDao = new MemberDao(dataSource);
+        MembersHttpController controller = new MembersHttpController(memberDao);
+
+        String requestBody = "memberName=TestMember&email=test@example.com";
+        controller.handle("POST","/api/members/add",new ByteArrayOutputStream(),requestBody,null);
+
+        controller.handle("POST","/api/members/remove",new ByteArrayOutputStream(),"id=1",null);
+
+        assertThat(memberDao.listAll("SELECT * FROM members WHERE id = 1")).isEmpty();
+
+
     }
 
 

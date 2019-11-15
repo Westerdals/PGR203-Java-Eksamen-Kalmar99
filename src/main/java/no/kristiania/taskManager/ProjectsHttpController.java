@@ -29,50 +29,72 @@ public class ProjectsHttpController implements HttpController {
 
 
         try {
+            String[] target = requestPath.split("/");
             if(requestAction.equals("POST"))
             {
-                requestParameters = HttpServer.parseQueryString(body);
+                if(target[3].equals("add"))
+                {
+                    addProject(outputStream, body);
+                    return;
+                } else if (target[3].equals("remove"))
+                {
+                    //Remove
+                }
 
-
-                String name = URLDecoder.decode(requestParameters.get("projectName"), StandardCharsets.UTF_8.toString());
-                String status = URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString());
-
-                Project project = new Project(name,status);
-                System.out.println("Created new Project with name: " + project.getName() + "And Status: " + project.getStatus());
-                projectDao.insert(project,"insert into projects (name,status) values (?,?)");
-                outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
-                        "Location: http://localhost:8080/\r\n"+
-                        "Connection: close\r\n"+
-                        "\r\n").getBytes());
-                return;
             }
 
-
+            String responseBody = "";
+            if(target[3].equals("select"))
+            {
+                responseBody = getSelectBody();
+            } else { responseBody = getBody(); }
             //create response
-            String statusCode = "200";
-            String contentType = "text/html";
-            String responseBody = getBody();
+            sendResponse(outputStream, responseBody, "text/html", "200 OK");
 
-            outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
-                    "Content-length: " + responseBody.length() + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    responseBody).getBytes());
         } catch (SQLException e) {
             String message = e.toString();
-
-            outputStream.write(("HTTP/1.1 500 Internal server error\r\n" +
-                    "Content-length: " + message.length() + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    message).getBytes());
+            sendResponse(outputStream, message, "text/html", "501 Internal server error");
         }
 
+    }
+
+    private void sendResponse(OutputStream outputStream, String responseBody, String contentType, String statusCode) throws IOException {
+        outputStream.write(("HTTP/1.1 " + statusCode + "\r\n" +
+                "Content-type:" + contentType + "\r\n" +
+                "Content-length: " + responseBody.length() + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                responseBody).getBytes());
+    }
+
+    private void addProject(OutputStream outputStream, String body) throws IOException {
+        Map<String, String> requestParameters;
+        requestParameters = HttpServer.parseQueryString(body);
+
+
+        String name = URLDecoder.decode(requestParameters.get("projectName"), StandardCharsets.UTF_8.toString());
+        String status = URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString());
+
+        Project project = new Project(name,status);
+        System.out.println("Created new Project with name: " + project.getName() + "And Status: " + project.getStatus());
+        projectDao.insert(project,"insert into projects (name,status) values (?,?)");
+        outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
+                "Location: http://localhost:8080/\r\n"+
+                "Connection: close\r\n"+
+                "\r\n").getBytes());
+        return;
     }
 
     public String getBody() throws SQLException {
         String body = projectDao.listAll("SELECT * FROM projects").stream()
                 .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getId(),p.getName(),p.getStatus()))
+                .collect(Collectors.joining(""));
+        return body;
+    }
+
+    public String getSelectBody() throws SQLException {
+        String body = projectDao.listAll("SELECT * FROM projects").stream()
+                .map(p -> String.format("<option id='%s'>%s</option>",p.getId(),p.getName()))
                 .collect(Collectors.joining(""));
         return body;
     }

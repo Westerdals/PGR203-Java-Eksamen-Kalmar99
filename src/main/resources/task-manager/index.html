@@ -11,7 +11,10 @@
 <div>
     <a href="newMember.html">Add New Member</a>
     <br>
+    <a href="removeMember.html">Remove member</a>
+    <br>
     <a href="newProjectTask.html">Add new project task</a>
+
 </div>
 
 <h3>
@@ -41,7 +44,7 @@
 </table>
 </body>
 <script>
-    fetch("/api/members")
+    fetch("/api/members/add")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
@@ -65,7 +68,7 @@
         document.getElementById("projects").innerHTML = text.toString();
     });
 
-    fetch("/api/members/memberSelect")
+    fetch("/api/members/select")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
@@ -73,14 +76,14 @@
     });
 
 
-    fetch("/api/projects/projectSelect")
+    fetch("/api/projects/select")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
         document.getElementById("taskSelect").innerHTML = text.toString();
     });
 
-    fetch("/api/projects")
+    fetch("/api/projects/add")
         .then(function(response) {
             return response.text();
         }).then(function(text) {

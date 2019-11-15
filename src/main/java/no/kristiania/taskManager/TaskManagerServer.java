@@ -47,11 +47,19 @@ public class TaskManagerServer {
         logger.info("Started on: http//localhost:{}", server.getPort());
 
         server.setFileLocation("src/main/resources/task-manager");
-        server.addController("/api/members",new MembersHttpController(new MemberDao(dataSource)));
-        server.addController("/api/projects",new ProjectsHttpController(new ProjectDao(dataSource)));
-        server.addController("/api/members/memberSelect",new MemberSelectHttpController(new MemberDao(dataSource)));
-        server.addController("/api/projects/projectSelect",new ProjectsSelectHttpControll(new ProjectDao(dataSource)));
+
+        //Handling requests for members
+        server.addController("/api/members/add",new MembersHttpController(new MemberDao(dataSource)));
+        server.addController("/api/members/select",new MembersHttpController(new MemberDao(dataSource)));
+        server.addController("/api/members/remove",new MembersHttpController(new MemberDao(dataSource)));
+
         server.addController("/api/members/projectMember",new ProjectMemberHttpController(new ProjectMemberDao(dataSource)));
+
+        //Handling requests for projects
+        server.addController("/api/projects/add",new ProjectsHttpController(new ProjectDao(dataSource)));
+        server.addController("/api/projects/select",new ProjectsHttpController(new ProjectDao(dataSource)));
+
+
 
 
 
