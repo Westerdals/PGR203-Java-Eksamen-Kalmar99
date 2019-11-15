@@ -1,5 +1,5 @@
 # PG203 Mappeinnlevering for gruppe <>
-
+[![Build Status](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99.svg?token=ZwbhWyfocDYjz7nBUyRs&branch=master)](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99)
 *Dette er en mal som det anbefales at dere følger for `README.md`-filen til hovedinnleveringen i PGR203* 
 
 ## Hvordan kjøre dette programmet
