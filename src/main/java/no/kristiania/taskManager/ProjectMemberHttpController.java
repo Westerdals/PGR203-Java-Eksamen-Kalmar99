@@ -36,7 +36,7 @@ public class ProjectMemberHttpController implements HttpController {
                 String mname = URLDecoder.decode(requestParameters.get("memberSelect"), StandardCharsets.UTF_8.toString());
 
 
-                ProjectMember pmember = new ProjectMember(pname, mname);
+                ProjectMember pmember = new ProjectMember(mname,pname);
 
                 pmemberDao.insert(pmember, "insert into project_member (projectName,memberName) values (?,?)");
                 outputStream.write(("HTTP/1.1 302 Redirect\r\n" +

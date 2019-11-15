@@ -17,17 +17,16 @@ public class ProjectMemberDao extends AbstractDao<ProjectMember>{
 
     @Override
     protected void insertObject(ProjectMember member, PreparedStatement statement) throws SQLException {
-        statement.setString(2, member.getProjectName());
-        statement.setString(1,member.getMemberName());
+        statement.setString(1, member.getProjectName());
+        statement.setString(2,member.getMemberName());
     }
 
     @Override
     public ProjectMember readObject(ResultSet rs) throws SQLException {
         String name = rs.getString("projectName");
         String member = rs.getString("memberName");
-        ProjectMember pmember = new ProjectMember(name,member);
+        return new ProjectMember(name,member);
 
-        return pmember;
     }
 
     public Project readProject(ResultSet rs,List<Project> list) throws SQLException {

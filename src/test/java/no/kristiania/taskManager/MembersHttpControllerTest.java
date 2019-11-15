@@ -57,11 +57,11 @@ public class MembersHttpControllerTest {
 
         ProjectMemberHttpController controller = new ProjectMemberHttpController(projectMemberDao);
 
-        String requestBody = "memberSelect=Ola+Nordmann&TaskSelect=Gj%C3%B8re+Ferdig+Eksamen";
+        String requestBody = "memberSelect=Hello&TaskSelect=World";
         controller.handle("POST","api/members/projectMember",new ByteArrayOutputStream(),requestBody,null);
 
         assertThat(projectMemberDao.listAll("select * from project_member"))
-                .contains(new ProjectMember("Ola Nordmann","Gjøre Ferdig Eksamen"));
+                .contains(new ProjectMember("Hello","World"));
     }
 
 

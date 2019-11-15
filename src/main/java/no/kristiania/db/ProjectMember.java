@@ -47,9 +47,4 @@ public class ProjectMember {
     public int hashCode() {
         return Objects.hash(memberName, projectName);
     }
-
-
-
-
-
 }
