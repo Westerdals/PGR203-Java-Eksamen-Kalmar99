@@ -64,8 +64,8 @@ public class MembersHttpController implements HttpController {
 
     private void removeMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
         int id = Integer.valueOf(URLDecoder.decode(requestParameters.get("id"), StandardCharsets.UTF_8.toString()));
-        //logger.info("Removed member with id: {}",id);
-        memberDao.removeObject(id);
+        String name = URLDecoder.decode(requestParameters.get("name"), StandardCharsets.UTF_8.toString());
+        memberDao.removeObject(id,name);
         redirect(outputStream);
 
     }

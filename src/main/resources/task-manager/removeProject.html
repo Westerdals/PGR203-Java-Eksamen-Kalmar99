@@ -13,15 +13,14 @@
 <body>
 <h1>Remove project member</h1>
 
-<form method="POST" action="/api/members/remove">
-    <label>Member <select id="memberSelect" name="name"></select> </label>
+<form method="POST" action="/api/projects/remove">
+    <label>Project: <select id="projectSelect" name="name"></select> </label>
     <input type="number" id="id" name="id">
 
     <script>
         function updateId()
         {
-            //En liten snarvei men pytt pytt
-            var option = document.getElementById("memberSelect");
+            var option = document.getElementById("projectSelect");
             var id = option[option.selectedIndex].id;
             document.getElementById("id").value = id;
         }
@@ -35,16 +34,11 @@
 </div>
 </body>
 <script>
-    fetch("/api/members/select")
+    fetch("/api/projects/select")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
-        document.getElementById("memberSelect").innerHTML = text.toString();
-
-
-
-
-
+        document.getElementById("projectSelect").innerHTML = text.toString();
     });
 </script>
 </html>

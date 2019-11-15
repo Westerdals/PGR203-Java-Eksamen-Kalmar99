@@ -20,15 +20,25 @@ public class MemberDao extends AbstractDao<Member> {
     }
 
 
-    public void removeObject(int id)
+    public void removeObject(int id,String name)
     {
         try (Connection conn = dataSource.getConnection();) {
             PreparedStatement statement = conn.prepareStatement("DELETE FROM members WHERE id = (?)");
             statement.setInt(1,id);
-            int status = statement.executeUpdate();
-            if(status == 0)
+
+            PreparedStatement statement2 = conn.prepareStatement("DELETE FROM project_member WHERE membername = (?)");
+            statement2.setString(1,name);
+            int status2 = statement2.executeUpdate();
+
+            if(status2 <= 0)
             {
-                logger.error("No data was found at ID:{}, no data was deleted!",id);
+                logger.error("No data was found at ID:{} and name: {}, no data was deleted!",id,name);
+            }
+
+            int status = statement.executeUpdate();
+            if(status <= 0)
+            {
+                logger.error("No data was found at ID:{} and name: {}, no data was deleted!",id,name);
             }
 
         } catch (SQLException e) {

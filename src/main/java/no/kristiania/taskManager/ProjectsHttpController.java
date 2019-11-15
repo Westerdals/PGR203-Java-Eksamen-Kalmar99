@@ -32,13 +32,14 @@ public class ProjectsHttpController implements HttpController {
             String[] target = requestPath.split("/");
             if(requestAction.equals("POST"))
             {
+                requestParameters = HttpServer.parseQueryString(body);
                 if(target[3].equals("add"))
                 {
-                    addProject(outputStream, body);
+                    addProject(outputStream, requestParameters);
                     return;
                 } else if (target[3].equals("remove"))
                 {
-                    //Remove
+                    removeObject(outputStream,requestParameters);
                 }
 
             }
@@ -58,6 +59,15 @@ public class ProjectsHttpController implements HttpController {
 
     }
 
+    private void removeObject(OutputStream outputStream,  Map<String,String> requestParameters) throws IOException {
+
+        int id = Integer.valueOf(URLDecoder.decode(requestParameters.get("id"), StandardCharsets.UTF_8.toString()));
+        String name = URLDecoder.decode(requestParameters.get("name"), StandardCharsets.UTF_8.toString());
+        projectDao.removeObject(id,name);
+        redirect(outputStream);
+        return;
+    }
+
     private void sendResponse(OutputStream outputStream, String responseBody, String contentType, String statusCode) throws IOException {
         outputStream.write(("HTTP/1.1 " + statusCode + "\r\n" +
                 "Content-type:" + contentType + "\r\n" +
@@ -67,17 +77,18 @@ public class ProjectsHttpController implements HttpController {
                 responseBody).getBytes());
     }
 
-    private void addProject(OutputStream outputStream, String body) throws IOException {
-        Map<String, String> requestParameters;
-        requestParameters = HttpServer.parseQueryString(body);
-
-
+    private void addProject(OutputStream outputStream, Map<String,String> requestParameters) throws IOException {
         String name = URLDecoder.decode(requestParameters.get("projectName"), StandardCharsets.UTF_8.toString());
         String status = URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString());
 
         Project project = new Project(name,status);
         System.out.println("Created new Project with name: " + project.getName() + "And Status: " + project.getStatus());
         projectDao.insert(project,"insert into projects (name,status) values (?,?)");
+        redirect(outputStream);
+        return;
+    }
+
+    private void redirect(OutputStream outputStream) throws IOException {
         outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
                 "Location: http://localhost:8080/\r\n"+
                 "Connection: close\r\n"+
