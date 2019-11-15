@@ -76,8 +76,6 @@ public class MembersHttpControllerTest {
         controller.handle("POST","/api/members/remove",new ByteArrayOutputStream(),"id=1&name=hei",null);
 
         assertThat(memberDao.listAll("SELECT * FROM members WHERE id = 1")).isEmpty();
-
-
     }
 
 

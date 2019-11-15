@@ -2,12 +2,16 @@ package no.kristiania.taskManager;
 
 import no.kristiania.db.Project;
 import no.kristiania.db.ProjectDao;
+import no.kristiania.db.ProjectMember;
+import no.kristiania.db.ProjectMemberDao;
 import no.kristiania.dbtest.MemberDaoTest;
 import no.kristiania.dbtest.ProjectDaoTest;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +34,31 @@ public class ProjectsHttpControllerTest {
 
         ProjectsHttpController controller = new ProjectsHttpController(projectDao);
         assertThat(controller.getBody()).contains(project.getName());
+    }
 
+    @Test
+    void shouldAddProject() throws SQLException, IOException {
+        ProjectDao projectDao = new ProjectDao(dataSource);
+
+        ProjectsHttpController controller = new ProjectsHttpController(projectDao);
+
+        String requestBody = "projectName=Hello&projectStatus=World";
+        controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
+
+        assertThat(projectDao.listAll("select * from projects"))
+                .contains(new Project("Hello","World"));
+    }
+
+    @Test
+    void shouldRemoveProject() throws IOException, SQLException {
+        ProjectDao projectDao = new ProjectDao(dataSource);
+        ProjectsHttpController controller = new ProjectsHttpController(projectDao);
+
+        String requestBody = "projectName=Hello&projectStatus=World";
+        controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
+
+        controller.handle("POST","/api/projects/remove",new ByteArrayOutputStream(),"name=Hello&id=1",null);
+
+        assertThat(projectDao.listAll("SELECT * FROM projects WHERE id = 1")).isEmpty();
     }
 }
