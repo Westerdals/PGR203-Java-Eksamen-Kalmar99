@@ -12,8 +12,19 @@
     </style>
 </head>
 <body>
-<h1>Add project task</h1>
+<h1>Add Task</h1>
 
+<div id="menu">
+    <a href="index.html">Home</a>
+    <a href="newMember.html">Add New Member</a>
+    <a href="removeMember.html">Remove member</a>
+    <a href="newProjectTask.html">Add new project task</a>
+    <a href="removeProject.html">remove project task</a>
+    <a href="newStatus.html">Add new status</a>
+    <a href="removeStatus.html">Add new status</a>
+
+</div>
+<br><br>
 <form method="POST" action="/api/projects/add">
     <label>Project Name: <input type="text" name="projectName" /></label>
     <input type="number" id="id" name="projectStatus">

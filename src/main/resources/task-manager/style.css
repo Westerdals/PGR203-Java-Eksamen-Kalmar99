@@ -1,10 +1,14 @@
 html,body{
     margin:0;
     padding:0;
+    font-family: 'Montserrat', sans-serif;
+    height:100%;
+    width:100%;
+
 }
 
-header h1 {
-    padding:5px;
+h1 {
+    padding:10px;
     margin:0;
 }
 
@@ -18,17 +22,146 @@ tr {
 
 #menu {
     display:inline-block;
+    background-color: #4CAF50;
+    width:100%;
+
 }
 
-a {
+#menu a {
     display:inline-block;
-    padding:10px;
-    margin:5px;
+    padding:15px;
+    margin-left:5px;
+    margin-right:5px;
     text-decoration: none;
-    background-color:#4ef542;
+    color:white;
+}
+
+#menu a:hover {
+    background-color:#60db65;
     color:black;
+    font-weight: 600;
 }
 
 header {
-    background-color:gray;
+
+}
+
+#wrapper {
+    display:grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    grid-template-columns: 30% 30% 30%;
+    grid-template-rows:5% 60% 40%;
+    width:100%;
+    height:100%;
+}
+
+#Members
+{
+    background-color:#e3e3e3;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+.head {
+    text-align: center;
+}
+
+.row h3,label
+{
+    margin-left:10px;
+}
+
+.row table {
+    width:90%;
+    margin-left:5%;
+
+}
+
+.row {
+    height:100%;
+}
+
+.row table th {
+    background-color: #4CAF50;
+    color:white;
+}
+
+.row table td {
+    background-color:white;
+}
+
+#Status
+{
+    height: 30%;
+    background-color:#e3e3e3;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 3;
+}
+
+#Status h3 {
+    margin-left:10px;
+}
+
+
+
+
+
+#AddMember{
+    height: 30%;
+    background-color:#e3e3e3;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 3;
+    grid-row-end: 3;
+}
+
+#AddMember h3 {
+    margin-left: 10px;
+}
+
+#MembersWithProjects
+{
+    background-color:#e3e3e3;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+#Alltasks
+{
+    background-color:#e3e3e3;
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+#header1
+{
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 1;
+}
+
+#header2
+{
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 1;
+}
+
+#header3
+{
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 1;
 }

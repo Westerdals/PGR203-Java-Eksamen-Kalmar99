@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>KristianiaProject</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -11,6 +13,7 @@
 <h1>Task Manager</h1>
 
 <div id="menu">
+    <a href="index.html">Home</a>
     <a href="newMember.html">Add New Member</a>
     <a href="removeMember.html">Remove member</a>
     <a href="newProjectTask.html">Add new project task</a>
@@ -20,54 +23,76 @@
 
 </div>
 </header>
-<h3>
-    Members:
-    <hr>
-</h3>
-<table id="projectMembers"></table>
+<div id="wrapper">
 
-<h3>Project Tasks With assigned members</h3>
-<hr>
-<table id="projects">
-
-</table>
-
-<h3>Add Member to Project Task</h3>
-<form method="POST" action="/api/members/projectMember" >
-    <label>Member <select id="memberSelect" name="memberSelect"></select> </label>
-    <label>Task <select id="taskSelect" name="TaskSelect"></select> </label>
-    <button>Add</button>
-</form>
-<h3>Change Status</h3>
-<form method="POST" action="/api/status/edit" >
-
-    <span style="display:none">
-    <input type="number" id="nid" name="sid">
-    <input type="number" id="sid" name="sid2">
-    </span>
-    <script>
-        function updateId()
-        {
-            var option = document.getElementById("taskSelect2");
-            var id = option[option.selectedIndex].id;
-            document.getElementById("nid").value = id;
-
-            var option = document.getElementById("statusSelect");
-            var id = option[option.selectedIndex].id;
-            document.getElementById("sid").value = id;
-        }
-    </script>
-    <label>Task <select id="taskSelect2"></select> </label>
-    <label>Task <select id="statusSelect"></select> </label>
-    <button onclick="updateId()">Add</button>
-</form>
+    <h3 id="header2" class="head">Project Tasks With assigned members</h3>
+    <div id="MembersWithProjects" class="row">
 
 
-<h3>All Tasks</h3>
-<hr>
+        <table id="projects">
+
+        </table>
+    </div>
+    <h3 id="header1" class="head">Members</h3>
+    <div id="Members" class="row">
+
+
+        <table id="projectMembers"></table>
+
+    </div>
+
+    <h3 id="header3" class="head">All Tasks</h3>
+<div id="Alltasks" class="row">
+
+
 <table id="projectsWithOutMembers">
 
 </table>
+</div>
+
+    <div id="Status">
+    <h3>Change Status</h3>
+    <form method="POST" action="/api/status/edit" >
+
+                <span style="display:none">
+                <input type="number" id="nid" name="sid">
+                <input type="number" id="sid" name="sid2">
+                </span>
+        <script>
+            function updateId()
+            {
+                var option = document.getElementById("taskSelect2");
+                var id = option[option.selectedIndex].id;
+                document.getElementById("nid").value = id;
+
+                var option = document.getElementById("statusSelect");
+                var id = option[option.selectedIndex].id;
+                document.getElementById("sid").value = id;
+            }
+        </script>
+        <label>Task <select id="taskSelect2"></select> </label>
+        <label>Task <select id="statusSelect"></select> </label>
+        <button onclick="updateId()">Add</button>
+    </form>
+    </div>
+
+    <div id="AddMember">
+        <h3>Add Member to Project Task</h3>
+        <form method="POST" action="/api/members/projectMember" >
+            <label>Member <select id="memberSelect" name="memberSelect"></select> </label>
+            <label>Task <select id="taskSelect" name="TaskSelect"></select> </label>
+            <button>Add</button>
+        </form>
+    </div>
+
+
+
+</div>
+
+
+
+
+
 </body>
 <script>
     fetch("/api/members/add")

@@ -46,8 +46,6 @@ public class ProjectsHttpControllerTest {
 
         controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
 
-
-
         Project[] lista = projectDao.listAll("select * from projects").toArray(new Project[0]);
         assertThat(lista[0].getName()).isEqualTo(new Project("Hello",1).getName());
 

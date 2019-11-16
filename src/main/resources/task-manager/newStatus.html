@@ -2,12 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Member</title>
+    <title>Add Status</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Add project member</h1>
 
+<h1>Add Status</h1>
+<div id="menu">
+    <a href="index.html">Home</a>
+    <a href="newMember.html">Add New Member</a>
+    <a href="removeMember.html">Remove member</a>
+    <a href="newProjectTask.html">Add new project task</a>
+    <a href="removeProject.html">remove project task</a>
+    <a href="newStatus.html">Add new status</a>
+    <a href="removeStatus.html">Add new status</a>
+
+</div>
+<br><br>
 <form method="POST" action="/api/status/add">
     <label>statusName <input type="text" name="name" /></label>
     <button>Add</button>
