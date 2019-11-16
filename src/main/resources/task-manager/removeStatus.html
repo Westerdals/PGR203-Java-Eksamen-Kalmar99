@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Task</title>
+    <title>Remove Status</title>
     <link rel="stylesheet" href="style.css">
     <style>
         input[type=number]
@@ -12,11 +12,10 @@
     </style>
 </head>
 <body>
-<h1>Add project task</h1>
+<h1>Remove status</h1>
 
-<form method="POST" action="/api/projects/add">
-    <label>Project Name: <input type="text" name="projectName" /></label>
-    <input type="number" id="id" name="projectStatus">
+<form method="POST" action="/api/status/remove">
+    <input type="number" id="id" name="id">
     <script>
         function updateId()
         {
@@ -26,8 +25,8 @@
             document.getElementById("id").value = id;
         }
     </script>
-    <label>Project Status: <select id="projectOption"> </select></label>
-    <button onclick="updateId()">Add</button>
+    <label>Name: <select id="projectOption" name="name"> </select></label>
+    <button onclick="updateId()">Remove</button>
 </form>
 
 <div>

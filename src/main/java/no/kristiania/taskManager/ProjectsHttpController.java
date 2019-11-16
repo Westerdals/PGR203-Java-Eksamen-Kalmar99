@@ -48,6 +48,10 @@ public class ProjectsHttpController implements HttpController {
             if(target[3].equals("select"))
             {
                 responseBody = getSelectBody();
+            } else if(target.equals("status"))
+            {
+                responseBody = getStatusBody();
+
             } else { responseBody = getBody(); }
             //create response
             sendResponse(outputStream, responseBody, "text/html", "200 OK");
@@ -57,6 +61,13 @@ public class ProjectsHttpController implements HttpController {
             sendResponse(outputStream, message, "text/html", "501 Internal server error");
         }
 
+    }
+
+    private String getStatusBody() throws SQLException {
+        String body = projectDao.listAll("SELECT * FROM project_status").stream()
+                .map(p -> String.format("<option id='%s'>%s</option>",p.getId(),p.getName()))
+                .collect(Collectors.joining(""));
+        return body;
     }
 
     private void removeObject(OutputStream outputStream,  Map<String,String> requestParameters) throws IOException {
@@ -79,11 +90,14 @@ public class ProjectsHttpController implements HttpController {
 
     private void addProject(OutputStream outputStream, Map<String,String> requestParameters) throws IOException {
         String name = URLDecoder.decode(requestParameters.get("projectName"), StandardCharsets.UTF_8.toString());
-        String status = URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString());
+        int status = Integer.valueOf(URLDecoder.decode(requestParameters.get("projectStatus"),StandardCharsets.UTF_8.toString()));
 
         Project project = new Project(name,status);
         System.out.println("Created new Project with name: " + project.getName() + "And Status: " + project.getStatus());
+
         projectDao.insert(project,"insert into projects (name,status) values (?,?)");
+
+
         redirect(outputStream);
         return;
     }
@@ -97,8 +111,10 @@ public class ProjectsHttpController implements HttpController {
     }
 
     public String getBody() throws SQLException {
-        String body = projectDao.listAll("SELECT * FROM projects").stream()
-                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getId(),p.getName(),p.getStatus()))
+        String body = projectDao.listAll("SELECT projects.id, projects.name,project_status.name as status" +
+                "    FROM projects" +
+                "    JOIN project_status ON projects.status = project_status.id;").stream()
+                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getId(),p.getName(),p.getStatusname()))
                 .collect(Collectors.joining(""));
         return body;
     }

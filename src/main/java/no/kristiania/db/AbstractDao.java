@@ -35,6 +35,7 @@ public abstract class AbstractDao<T> {
 
             PreparedStatement statement2 = conn.prepareStatement(sql2);
             statement2.setString(1,name);
+            statement2.executeUpdate();
 
             int status = statement.executeUpdate();
             if(status <= 0)

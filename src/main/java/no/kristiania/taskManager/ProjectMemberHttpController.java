@@ -73,8 +73,11 @@ public class ProjectMemberHttpController implements HttpController {
     }
 
     public String getBody() throws SQLException {
-        String body = pmemberDao.listAllWithMembers("SELECT name,status,project_member.membername FROM projects JOIN project_member ON name = projectname;").stream()
-                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getStatus(),p.getMembers()))
+        String body = pmemberDao.listAllWithMembers("SELECT projects.name,project_status.name as status , project_member.membername\n" +
+                "    FROM projects\n" +
+                "    JOIN project_member ON projects.name = projectname\n" +
+                "    JOIN project_status ON projects.status = project_status.id;").stream()
+                .map(p -> String.format("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",p.getName(),p.getStatusname(),p.getMembers()))
                 .collect(Collectors.joining(""));
         return body;
     }

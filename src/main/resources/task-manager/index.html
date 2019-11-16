@@ -6,16 +6,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Project view</h1>
+<h1>Task Manager</h1>
 
-<div>
+<div id="menu">
     <a href="newMember.html">Add New Member</a>
-    <br>
     <a href="removeMember.html">Remove member</a>
-    <br>
     <a href="newProjectTask.html">Add new project task</a>
-    <br>
     <a href="removeProject.html">remove project task</a>
+    <a href="newStatus.html">Add new status</a>
+    <a href="removeStatus.html">Add new status</a>
 
 </div>
 
@@ -36,6 +35,29 @@
     <label>Member <select id="memberSelect" name="memberSelect"></select> </label>
     <label>Task <select id="taskSelect" name="TaskSelect"></select> </label>
     <button>Add</button>
+</form>
+<h3>Change Status</h3>
+<form method="POST" action="/api/status/edit" >
+
+    <span style="display:none">
+    <input type="number" id="nid" name="sid">
+    <input type="number" id="sid" name="sid2">
+    </span>
+    <script>
+        function updateId()
+        {
+            var option = document.getElementById("taskSelect2");
+            var id = option[option.selectedIndex].id;
+            document.getElementById("nid").value = id;
+
+            var option = document.getElementById("statusSelect");
+            var id = option[option.selectedIndex].id;
+            document.getElementById("sid").value = id;
+        }
+    </script>
+    <label>Task <select id="taskSelect2"></select> </label>
+    <label>Task <select id="statusSelect"></select> </label>
+    <button onclick="updateId()">Add</button>
 </form>
 
 
@@ -58,6 +80,7 @@
         document.getElementById("projectMembers").innerHTML = text.toString();
     });
 
+
     fetch("/api/members/projectMember")
         .then(function(response) {
             return response.text();
@@ -77,12 +100,27 @@
         document.getElementById("memberSelect").innerHTML = text.toString();
     });
 
+    fetch("/api/status/select")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        document.getElementById("statusSelect").innerHTML = text.toString();
+    });
+
+
 
     fetch("/api/projects/select")
         .then(function(response) {
             return response.text();
         }).then(function(text) {
         document.getElementById("taskSelect").innerHTML = text.toString();
+    });
+
+    fetch("/api/projects/select")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        document.getElementById("taskSelect2").innerHTML = text.toString();
     });
 
     fetch("/api/projects/add")

@@ -5,3 +5,16 @@ table {
 tr {
     background-color: #ebebeb;
 }
+
+#menu {
+    display:inline-block;
+}
+
+a {
+    display:inline-block;
+    padding:10px;
+    margin:5px;
+    text-decoration: none;
+    background-color:#4ef542;
+    color:black;
+}

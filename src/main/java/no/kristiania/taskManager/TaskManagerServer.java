@@ -3,6 +3,7 @@ package no.kristiania.taskManager;
 import no.kristiania.db.MemberDao;
 import no.kristiania.db.ProjectDao;
 import no.kristiania.db.ProjectMemberDao;
+import no.kristiania.db.StatusDao;
 import no.kristiania.httpserver.HttpServer;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -64,6 +65,12 @@ public class TaskManagerServer {
         server.addController("/api/projects/add",projectController);
         server.addController("/api/projects/select",projectController);
         server.addController("/api/projects/remove",projectController);
+
+
+        server.addController("/api/status/add",new StatusHttpController(new StatusDao(dataSource)));
+        server.addController("/api/status/remove",new StatusHttpController(new StatusDao(dataSource)));
+        server.addController("/api/status/select",new StatusHttpController(new StatusDao(dataSource)));
+        server.addController("/api/status/edit",new StatusHttpController(new StatusDao(dataSource)));
 
 
 

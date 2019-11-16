@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class ProjectDao extends AbstractDao<Project> {
@@ -27,7 +29,7 @@ public class ProjectDao extends AbstractDao<Project> {
     @Override
     protected void insertObject(Project project, PreparedStatement statement) throws SQLException {
         statement.setString(1, project.getName());
-        statement.setString(2,project.getStatus());
+        statement.setInt(2,project.getStatus());
     }
 
     public void removeObject(int id,String name)
@@ -41,9 +43,21 @@ public class ProjectDao extends AbstractDao<Project> {
         int id = rs.getInt("id");
         String projectName = rs.getString("name");
         String status = rs.getString("status");
+
+        /*
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT name FROM project_status WHERE id = (?)");
+        statement.setInt(1,statusID);
+        ResultSet rs2 = statement.executeQuery();
+        String status = rs2.getString("name"); */
+
         Project project = new Project(projectName,status,id);
         return project;
     }
+
+
+
 
     public static void main(String[] args) throws SQLException, IOException {
         Properties properties = new Properties();

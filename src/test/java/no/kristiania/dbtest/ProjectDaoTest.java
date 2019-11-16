@@ -33,7 +33,7 @@ public class ProjectDaoTest {
     public static Project getSampleProject()
     {
         String projectTitle = pickOne(new String[]{"Hilse","Hoppe","Bestå"});
-        String status = pickOne(new String[] {"In Progress","Done"});
+        int status = 1;
 
         Project testProject = new Project(projectTitle,status);
         return testProject;

@@ -42,11 +42,11 @@ public class ProjectsHttpControllerTest {
 
         ProjectsHttpController controller = new ProjectsHttpController(projectDao);
 
-        String requestBody = "projectName=Hello&projectStatus=World";
+        String requestBody = "projectName=Hello&projectStatus=1";
         controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
 
         assertThat(projectDao.listAll("select * from projects"))
-                .contains(new Project("Hello","World"));
+                .contains(new Project("Hello",1));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ProjectsHttpControllerTest {
         ProjectDao projectDao = new ProjectDao(dataSource);
         ProjectsHttpController controller = new ProjectsHttpController(projectDao);
 
-        String requestBody = "projectName=Hello&projectStatus=World";
+        String requestBody = "projectName=Hello&projectStatus=1";
         controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
 
         controller.handle("POST","/api/projects/remove",new ByteArrayOutputStream(),"name=Hello&id=1",null);

@@ -22,7 +22,8 @@ public class MemberDao extends AbstractDao<Member> {
 
     public void removeObject(int id,String name)
     {
-        delete(id, name,"DELETE FROM members WHERE id = (?)","DELETE FROM project_member WHERE membername = (?)");
+
+        delete(id, name,"DELETE FROM members WHERE id = (?)","DELETE FROM project_member where membername = (?)");
     }
 
 

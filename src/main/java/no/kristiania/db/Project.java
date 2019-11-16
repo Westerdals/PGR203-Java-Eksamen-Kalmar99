@@ -6,17 +6,35 @@ import java.util.Objects;
 public class Project {
 
     private String name;
-    private String status;
+    private int status;
     private ArrayList<String> members = new ArrayList<>();
     int id;
+    private String statusname;
 
-    public Project(String name, String status)
+    public Project(String name, int status)
     {
         this.name = name;
         this.status = status;
     }
 
-    public Project (String name, String status, int id)
+    public Project(String name, String status,int id)
+    {
+        this.id = id;
+        this.name = name;
+        this.statusname = status;
+    }
+
+    public Project(String name, String status)
+    {
+        this.name = name;
+        this.statusname = status;
+    }
+
+    public String getStatusname() {
+        return statusname;
+    }
+
+    public Project (String name, int status, int id)
     {
         this.name = name;
         this.status = status;
@@ -51,11 +69,11 @@ public class Project {
         this.name = name;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -64,12 +82,18 @@ public class Project {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return name.equals(project.name) &&
-                status.equals(project.status);
+        return status == project.status &&
+                id == project.id &&
+                Objects.equals(name, project.name) &&
+                Objects.equals(members, project.members);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, status);
+        return Objects.hash(name, status, members, id);
+    }
+
+    public ArrayList<String> getMemberArray() {
+        return this.members;
     }
 }
