@@ -84,13 +84,14 @@ public class Project {
         Project project = (Project) o;
         return status == project.status &&
                 id == project.id &&
-                Objects.equals(name, project.name) &&
-                Objects.equals(members, project.members);
+                name.equals(project.name) &&
+                Objects.equals(members, project.members) &&
+                Objects.equals(statusname, project.statusname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, status, members, id);
+        return Objects.hash(name, status, members, id, statusname);
     }
 
     public ArrayList<String> getMemberArray() {

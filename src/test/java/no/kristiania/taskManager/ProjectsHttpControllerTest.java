@@ -43,10 +43,14 @@ public class ProjectsHttpControllerTest {
         ProjectsHttpController controller = new ProjectsHttpController(projectDao);
 
         String requestBody = "projectName=Hello&projectStatus=1";
+
         controller.handle("POST","/api/projects/add",new ByteArrayOutputStream(),requestBody,null);
 
-        assertThat(projectDao.listAll("select * from projects"))
-                .contains(new Project("Hello",1));
+
+
+        Project[] lista = projectDao.listAll("select * from projects").toArray(new Project[0]);
+        assertThat(lista[0].getName()).isEqualTo(new Project("Hello",1).getName());
+
     }
 
     @Test

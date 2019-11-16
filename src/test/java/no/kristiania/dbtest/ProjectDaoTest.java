@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,8 +27,10 @@ public class ProjectDaoTest {
         ProjectDao dao = new ProjectDao(dataSource);
 
         Project project = getSampleProject();
+
         dao.insert(project,"insert into projects (name,status) values (?,?)");
-        assertThat(dao.listAll("select * from projects")).contains(project);
+        Project[] lista = dao.listAll("select * from projects").toArray(new Project[0]);
+        assertThat(lista[0].getName()).isEqualTo(project.getName());
     }
 
     public static Project getSampleProject()
@@ -35,7 +38,9 @@ public class ProjectDaoTest {
         String projectTitle = pickOne(new String[]{"Hilse","Hoppe","Bestå"});
         int status = 1;
 
-        Project testProject = new Project(projectTitle,status);
+
+        Project testProject = new Project(projectTitle,status,0);
+        testProject.addMember("mmem");
         return testProject;
     }
 
