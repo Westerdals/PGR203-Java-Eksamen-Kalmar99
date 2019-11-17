@@ -9,6 +9,7 @@ import no.kristiania.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -28,38 +29,36 @@ public class ProjectMemberHttpController implements HttpController {
     public void handle(String requestAction, String requestPath, OutputStream outputStream, String body, Map<String, String> requestParameters) throws IOException {
 
         try {
+            String[] target = requestPath.split("/");
             if (requestAction.equals("POST")) {
-
                 requestParameters = HttpServer.parseQueryString(body);
 
-                String pname = URLDecoder.decode(requestParameters.get("TaskSelect"), StandardCharsets.UTF_8.toString());
-                String mname = URLDecoder.decode(requestParameters.get("memberSelect"), StandardCharsets.UTF_8.toString());
+                if(target[3].equals("remove"))
+                {
+                    removeMember(outputStream,requestParameters);
+                } else {
 
 
-                ProjectMember pmember = new ProjectMember(mname,pname);
+                    String pname = URLDecoder.decode(requestParameters.get("TaskSelect"), StandardCharsets.UTF_8.toString());
+                    String mname = URLDecoder.decode(requestParameters.get("memberSelect"), StandardCharsets.UTF_8.toString());
 
-                pmemberDao.insert(pmember, "insert into project_member (projectName,memberName) values (?,?)");
-                outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
-                        "Location: http://localhost:8080/\r\n" +
-                        "Connection: close\r\n" +
-                        "\r\n").getBytes());
-                return;
+
+                    ProjectMember pmember = new ProjectMember(mname, pname);
+
+                    pmemberDao.insert(pmember, "insert into project_member (projectName,memberName) values (?,?)");
+                    redirect(outputStream);
+                    return;
+                }
             }
 
-
             //create response
-            String responseBody;
-            String statusCode = "200";
-            String contentType = "text/html";
-
-            responseBody = getBody();
-
-            outputStream.write(("HTTP/1.1 " + statusCode + " OK\r\n" +
+            String responseBody = getBody();
+            outputStream.write(("HTTP/1.1 200 OK\r\n" +
                     "Content-length: " + responseBody.length() + "\r\n" +
+                    "Content-type: text/html\r\n" +
                     "Connection: close\r\n" +
                     "\r\n" +
                     responseBody).getBytes());
-
         } catch (SQLException e) {
             String message = e.toString();
 
@@ -71,6 +70,22 @@ public class ProjectMemberHttpController implements HttpController {
         }
 
     }
+
+    private void removeMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+        String name = URLDecoder.decode(requestParameters.get("name"), StandardCharsets.UTF_8.toString());
+        String projectName = URLDecoder.decode(requestParameters.get("task"), StandardCharsets.UTF_8.toString());
+        pmemberDao.removeMember(name,projectName);
+        redirect(outputStream);
+    }
+
+    private void redirect(OutputStream outputStream) throws IOException {
+        outputStream.write(("HTTP/1.1 302 Redirect\r\n" +
+                "Location: http://localhost:8080/\r\n" +
+                "Connection: close\r\n" +
+                "\r\n").getBytes());
+        return;
+    }
+
 
     public String getBody() throws SQLException {
         String body = pmemberDao.listAllWithMembers("SELECT projects.name,project_status.name as status , project_member.membername\n" +

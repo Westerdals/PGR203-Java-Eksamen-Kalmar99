@@ -51,7 +51,7 @@
 </table>
 </div>
 
-    <div id="Status">
+    <div id="Status" class="smallBox">
     <h3>Change Status</h3>
     <form method="POST" action="/api/status/edit" >
 
@@ -71,18 +71,33 @@
                 document.getElementById("sid").value = id;
             }
         </script>
-        <label>Task <select id="taskSelect2"></select> </label>
-        <label>Task <select id="statusSelect"></select> </label>
-        <button onclick="updateId()">Add</button>
+        <label>Task</label>
+        <select id="taskSelect2"></select>
+        <label>Status</label>
+        <select id="statusSelect"></select>
+        <button onclick="updateId()">Change</button>
     </form>
     </div>
 
-    <div id="AddMember">
-        <h3>Add Member to Project Task</h3>
+    <div id="AddMember" class="smallBox">
+        <h3>Assign member to task</h3>
         <form method="POST" action="/api/members/projectMember" >
-            <label>Member <select id="memberSelect" name="memberSelect"></select> </label>
-            <label>Task <select id="taskSelect" name="TaskSelect"></select> </label>
-            <button>Add</button>
+            <label>Member</label>
+            <select id="memberSelect" name="memberSelect"></select>
+            <label>Task</label>
+            <select id="taskSelect" name="TaskSelect"></select>
+            <button>Assign</button>
+        </form>
+    </div>
+
+    <div id="RemoveMember" class="smallBox">
+        <h3>Remove Member from task</h3>
+        <form method="POST" action="/api/projectMember/remove">
+            <label>Task</label>
+            <select id="taskswithmembers" name="task"></select>
+            <label>Member</label>
+            <input name="name">
+            <button>Remove</button>
         </form>
     </div>
 
@@ -96,6 +111,21 @@
 
 </body>
 <script>
+
+    fetch("/api/projects/select")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        document.getElementById("taskswithmembers").innerHTML = text.toString();
+    });
+
+    fetch("/api/projectmember/select")
+        .then(function(response) {
+            return response.text();
+        }).then(function(text) {
+        document.getElementById("memberSelectFromProject").innerHTML = text.toString();
+    });
+
     fetch("/api/members/add")
         .then(function(response) {
             return response.text();

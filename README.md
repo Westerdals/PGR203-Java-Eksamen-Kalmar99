@@ -1,25 +1,29 @@
 # PG203 Mappeinnlevering for gruppe <>
 [![Build Status](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99.svg?token=ZwbhWyfocDYjz7nBUyRs&branch=master)](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99)
-*Dette er en mal som det anbefales at dere følger for `README.md`-filen til hovedinnleveringen i PGR203* 
 
-## Hvordan kjøre dette programmet
+This is a task managing program used to create tasks and assign them to members.
+#### Features
+* Add/remove/edit Task
+* Add/remove Status categories
+* Add/Remove/edit members
+* add or remove members from tasks
+* Give task a status
 
-### Bygg og test executable jar-fil
+### Usage
 
-1. Hvilken kommando skal man kjøre?
-2. Hvordan skal konfigurasjonsfilen opprettes?
-3. Hvordan startet du programmet?
+1. Build project with `mvn package`
+2. Create a file named: `task-manager.properties` with the properties: dataSource.username, dataSource.passord and dataSource.url
+3. Run program with `java -jar target/task-manager-1.0-SNAPSHOT.jar`
 
 ### Funksjonalitet
 
-1. Skriv
-2. Et
-3. Kort
-4. Eksempel
-5. På
-6. Bruk
-7. Av
-8. Programmet
+1. Package and run program.
+2. go to http://localhost:8080
+3. Create a member from the web gui
+4. create a status from gui
+5. create a task and assign a status
+6. add member to task
+
 
 ## Designbeskrivelse
 

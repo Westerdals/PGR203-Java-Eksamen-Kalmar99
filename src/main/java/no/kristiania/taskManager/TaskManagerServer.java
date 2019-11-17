@@ -60,6 +60,7 @@ public class TaskManagerServer {
 
         //Handle requests for project_member database
         server.addController("/api/members/projectMember",new ProjectMemberHttpController(new ProjectMemberDao(dataSource)));
+        server.addController("/api/projectMember/remove",new ProjectMemberHttpController(new ProjectMemberDao(dataSource)));
 
         ProjectsHttpController projectController = new ProjectsHttpController(new ProjectDao(dataSource));
         //Handling requests for projects
@@ -67,6 +68,10 @@ public class TaskManagerServer {
         server.addController("/api/projects/select",projectController);
         server.addController("/api/projects/remove",projectController);
         server.addController("/api/projects/edit",projectController);
+
+
+
+
 
 
 

@@ -89,8 +89,6 @@ public abstract class AbstractDao<T> {
                 statement.setInt(2, targetID);
             }
 
-
-
             PreparedStatement statement2 = conn.prepareStatement(sql2);
             statement2.setString(1, parameter1);
             statement2.setString(2, parameter3);
