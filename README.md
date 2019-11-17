@@ -58,7 +58,7 @@ I Starten jobba vi hver for oss hvor en tok seg av å sette opp dao mens den and
 #### Hva vi fikk til bra i koden vår
 Vi fikk til mye funksjonalitet. Man kan legge til/fjerne og redigere både gruppe medlemmer, status og oppgaver samt legge medlemmer til oppgaver.
 #### Hva vi skulle ønske vi hadde gjort annerledes
-Vi skulle ønske vi hadde brukt mer tid på å modellere databasen og at vi hadde vert flinkere til å refaktorere koden da sluttresultatet vårt ikke var så ryddig som vi hadde håpet.
+Vi skulle ønske vi hadde brukt mer tid på å modellere databasen og at vi hadde vert flinkere til å refaktorere koden da sluttresultatet vårt ikke var så ryddig som vi hadde håpet. Vi skulle også planlagt tiden litt bedre.
 #### Evaluering fra annen gruppe
 Sjekk issues
 #### Evaluering gitt til annen gruppe
