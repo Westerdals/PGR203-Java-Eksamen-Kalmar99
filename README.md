@@ -34,7 +34,7 @@ This is a task managing program used to create tasks and assign them to members.
 ## Designbeskrivelse
 
 #### Database:
-![image](docs/dbModell.png)
+![image](docs/DbModell.PNG)
 
 #### Dao:
 ![image](docs/Database.png)
@@ -53,7 +53,7 @@ ex: a form on index.html is sending a POST request with the path: "api/members/r
 ## Egenevaluering
 
 #### Hva vi lærte underveis
-Vi har lært masse. I starten av prosjektet så var vi litt i tvil om vi kom til å klare det. Men vi tok en ting av gangen og har begge lært mye om hvordan man håndterer http requests og database interaksjon i java.
+Vi har lært masse. I starten av prosjektet så var vi litt i tvil om vi kom til å klare det. Men vi tok en ting av gangen og har begge lært mye om både HTTP og JDBC, flyway og postgreSql.
 I Starten jobba vi hver for oss hvor en tok seg av å sette opp dao mens den andre tok http serveren. ettervert fant vi ut av vi jobbet fortere med to hjerner istedenfor en så vi samarbeidet på samme pc på slutten. 
 #### Hva vi fikk til bra i koden vår
 Vi fikk til mye funksjonalitet. Man kan legge til/fjerne og redigere både gruppe medlemmer, status og oppgaver samt legge medlemmer til oppgaver.
