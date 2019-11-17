@@ -62,4 +62,4 @@ Vi skulle ønske vi hadde brukt mer tid på å modellere databasen og at vi hadd
 #### Evaluering fra annen gruppe
 Sjekk issues
 #### Evaluering gitt til annen gruppe
-sett inn link
+https://github.com/Westerdals/pgr203-2019-eksamen-JonasSay?fbclid=IwAR0Xnya1r6NjK4lx5SJaEoGLxMRoqEK8PJHsLH-mOKxiAxMBRF3IIZnQQt8
