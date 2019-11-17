@@ -37,6 +37,11 @@ public class ProjectDao extends AbstractDao<Project> {
         delete(id,name,"DELETE FROM projects WHERE id = (?)","DELETE FROM project_member WHERE projectname = (?)");
     }
 
+    public void editProject(String newName, String oldName, int id)
+    {
+        edit(id,newName,null,"UPDATE projects SET name = (?) WHERE id = (?)","UPDATE project_member SET projectname = (?) WHERE projectname = (?)",oldName);
+    }
+
 
     @Override
     public Project readObject(ResultSet rs) throws SQLException {

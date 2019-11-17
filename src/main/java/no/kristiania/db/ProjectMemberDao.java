@@ -60,14 +60,14 @@ public class ProjectMemberDao extends AbstractDao<ProjectMember>{
                                 boolean dontadd = false;
                                 for(String member : p.getMemberArray())
                                 {
-                                    if(member == (rs.getString("membername") ))
+                                    if(member.equals(rs.getString("membername") ))
                                     {
                                         dontadd = true;
                                     }
                                 }
-                                if(!dontadd)
-                                p.addMember(rs.getString("membername"));
-
+                                if(!dontadd) {
+                                    p.addMember(rs.getString("membername"));
+                                }
                             }
                         }
                         if(!skip) {

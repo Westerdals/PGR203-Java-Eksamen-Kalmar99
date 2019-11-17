@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Remove Member</title>
+    <title>Add Member</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        input {
-            display:none;
-        }
-    </style>
 </head>
+<style>
+    input[type=number]
+    {
+        display:none;
+    }
+</style>
 <body>
 
-<h1>Remove Member</h1>
+<h1>Add project member</h1>
 <div id="menu">
     <a href="index.html">Home</a>
     <a href="newMember.html">Add New Member</a>
@@ -25,22 +26,21 @@
     <a href="removeStatus.html">Remove status</a>
 </div>
 <br><br>
-
-<form method="POST" action="/api/members/remove">
-    <label>Member <select id="memberSelect" name="name"></select> </label>
-    <input type="number" id="id" name="id">
-
+<form method="POST" action="/api/members/edit">
+    <label>Select Member to edit: <select id="memberSelect" name="oldName"></select></label>
+    <input type="number" id="targetId" name="Id">
+    <label>New Name: <input type="text" name="newName" /></label>
+    <label>New Mail: <input type="text" name="newMail" /></label>
     <script>
         function updateId()
         {
-            //En liten snarvei men pytt pytt
             var option = document.getElementById("memberSelect");
             var id = option[option.selectedIndex].id;
-            document.getElementById("id").value = id;
+            document.getElementById("targetId").value = id;
+
         }
     </script>
-
-    <button onclick="updateId()">Remove</button>
+    <button onclick="updateId()">Add</button>
 </form>
 
 <div>
@@ -48,16 +48,11 @@
 </div>
 </body>
 <script>
-    fetch("/api/members/select")
-        .then(function(response) {
-            return response.text();
-        }).then(function(text) {
-        document.getElementById("memberSelect").innerHTML = text.toString();
-
-
-
-
-
-    });
+fetch("/api/members/select")
+    .then(function(response) {
+    return response.text();
+    }).then(function(text) {
+    document.getElementById("memberSelect").innerHTML = text.toString();
+});
 </script>
 </html>

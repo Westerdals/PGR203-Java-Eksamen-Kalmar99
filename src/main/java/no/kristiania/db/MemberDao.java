@@ -42,6 +42,11 @@ public class MemberDao extends AbstractDao<Member> {
         return member;
     }
 
+    public void editMember(int targetID,String name,String email,String oldName)
+    {
+        edit(targetID,name,email,"UPDATE members SET name = (?), email = (?) WHERE id = (?)","UPDATE project_member SET membername = (?) WHERE membername = (?)",oldName);
+    }
+
 
     public static void main(String[] args) throws SQLException, IOException {
         System.out.println("Enter a member name to insert");

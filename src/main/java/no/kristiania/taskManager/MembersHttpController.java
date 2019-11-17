@@ -31,25 +31,24 @@ public class MembersHttpController implements HttpController {
 
         try {
             String[] target = requestPath.split("/");
-            if(requestAction.equals("POST"))
-            {
+            if(requestAction.equals("POST")) {
 
                 requestParameters = HttpServer.parseQueryString(body);
-                if(target[3].equals("add"))
-                {
+                if(target[3].equals("add")) {
                     addMember(outputStream, requestParameters);
                     return;
-                } else if (target[3].equals("remove"))
-                {
+                } else if (target[3].equals("remove")) {
                     //remove
                     removeMember(outputStream,requestParameters);
+                } else if (target[3].equals("edit")) {
+                    //Edit
+                    editMember(outputStream,requestParameters);
                 }
 
             }
             String responseBody = "";
 
-            if(target[3].equals("select"))
-            {
+            if(target[3].equals("select")) {
                 responseBody = getSelectBody();
             } else { responseBody = getBody(); }
             sendResponse(outputStream, responseBody, "200 OK", "text/html");
@@ -60,6 +59,15 @@ public class MembersHttpController implements HttpController {
             sendResponse(outputStream,message,"501 Internal server error","text/html");
         }
 
+    }
+
+    private void editMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+        int targetID = Integer.valueOf(URLDecoder.decode(requestParameters.get("Id"), StandardCharsets.UTF_8.toString()));
+        String newName = URLDecoder.decode(requestParameters.get("newName"), StandardCharsets.UTF_8.toString());
+        String newMail = URLDecoder.decode(requestParameters.get("newMail"), StandardCharsets.UTF_8.toString());
+        String oldName = URLDecoder.decode(requestParameters.get("oldName"), StandardCharsets.UTF_8.toString());
+        memberDao.editMember(targetID,newName,newMail,oldName);
+        redirect(outputStream);
     }
 
     private void removeMember(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {

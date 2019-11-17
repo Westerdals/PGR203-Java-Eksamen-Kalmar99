@@ -8,6 +8,7 @@ import no.kristiania.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -40,6 +41,9 @@ public class ProjectsHttpController implements HttpController {
                 } else if (target[3].equals("remove"))
                 {
                     removeObject(outputStream,requestParameters);
+                } else if(target[3].equals("edit"))
+                {
+                    editProject(outputStream,requestParameters);
                 }
 
             }
@@ -60,6 +64,17 @@ public class ProjectsHttpController implements HttpController {
             String message = e.toString();
             sendResponse(outputStream, message, "text/html", "501 Internal server error");
         }
+
+    }
+
+    private void editProject(OutputStream outputStream, Map<String, String> requestParameters) throws IOException {
+
+        int id = Integer.valueOf(URLDecoder.decode(requestParameters.get("targetId"), StandardCharsets.UTF_8.toString()));
+        String name = URLDecoder.decode(requestParameters.get("newName"), StandardCharsets.UTF_8.toString());
+        String oldName = URLDecoder.decode(requestParameters.get("oldName"), StandardCharsets.UTF_8.toString());
+
+        projectDao.editProject(name,oldName,id);
+        redirect(outputStream);
 
     }
 

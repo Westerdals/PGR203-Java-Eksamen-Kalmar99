@@ -56,6 +56,7 @@ public class TaskManagerServer {
         server.addController("/api/members/add",memberController);
         server.addController("/api/members/select",memberController);
         server.addController("/api/members/remove",memberController);
+        server.addController("/api/members/edit",memberController);
 
         //Handle requests for project_member database
         server.addController("/api/members/projectMember",new ProjectMemberHttpController(new ProjectMemberDao(dataSource)));
@@ -65,16 +66,14 @@ public class TaskManagerServer {
         server.addController("/api/projects/add",projectController);
         server.addController("/api/projects/select",projectController);
         server.addController("/api/projects/remove",projectController);
+        server.addController("/api/projects/edit",projectController);
+
 
 
         server.addController("/api/status/add",new StatusHttpController(new StatusDao(dataSource)));
         server.addController("/api/status/remove",new StatusHttpController(new StatusDao(dataSource)));
         server.addController("/api/status/select",new StatusHttpController(new StatusDao(dataSource)));
         server.addController("/api/status/edit",new StatusHttpController(new StatusDao(dataSource)));
-
-
-
-
 
     }
 
