@@ -1,4 +1,4 @@
-# PG203 Mappeinnlevering for gruppe <if(levert){karakter=A}>
+# PG203 Mappeinnlevering
 [![Build Status](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99.svg?token=ZwbhWyfocDYjz7nBUyRs&branch=master)](https://travis-ci.com/Westerdals/pgr203-2019-eksamen-Kalmar99)
 
 This is a task managing program used to create tasks and assign them to members.
